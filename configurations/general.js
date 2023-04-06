@@ -35,7 +35,7 @@
 module.exports = {
     messageCommandPrefix: '!',
     defaultLanguage: 'en_us',
-    testGuildId: '1075538521340776489',
-    clientId: '1091431333336723588',
-    owner: '427212136134213644'
+    testGuildId: '930837601341022268',
+    clientId: '1091664896749473903',
+    owner: '801860642402467850'
 };

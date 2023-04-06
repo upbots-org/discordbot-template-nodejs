@@ -27,7 +27,7 @@
  */
 
 module.exports = {
-    async execute(interaction, client) {
+    async execute(message, client) {
         const { prefix } = client.configs.general;
         // TODO: add translations
         return message.channel.send(`Hi ${message.author}! My prefix is \`${prefix}\`, get help by \`${prefix}help\``);
