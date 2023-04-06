@@ -26,25 +26,10 @@
  * @since 1.0.0
  */
 
+// This module exports a configuration object for a Discord bot
+
 module.exports = {
-    name: 'ping',
-    category: __dirname,
-    description: async function (prefix, name) {
-        return prefix + name;
-    },
-    async execute(message, args) {
-        const { client, guild, channel, content, author } = message;
-        const { prefix, owner } = client.configs.general;
-
-        return new Promise(async (resolve, reject) => {
-            try {
-                message.reply({ content: 'Pong.' + `${client.configs.emojis.success}` });
-
-                resolve(true);
-            } catch (error) {
-                client.out.error('&fError in &6' + __dirname + '&f/&9' + this.name + ' &fCommand &c', error);
-                reject(error);
-            }
-        });
-    }
+    default: '⚙️',
+    success: '✅',
+    error: '❌'
 };

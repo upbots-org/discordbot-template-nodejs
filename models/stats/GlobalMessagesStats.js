@@ -26,25 +26,17 @@
  * @since 1.0.0
  */
 
-module.exports = {
-    name: 'ping',
-    category: __dirname,
-    description: async function (prefix, name) {
-        return prefix + name;
+const mongoose = require('mongoose');
+
+const { Schema, model } = mongoose;
+
+const GlobalMessageStatsSchema = new Schema(
+    {
+        userId: { type: String, required: true },
+        messages: { type: Number, required: true, default: 0 },
+        date: { type: Date, required: true }
     },
-    async execute(message, args) {
-        const { client, guild, channel, content, author } = message;
-        const { prefix, owner } = client.configs.general;
+    { timestamps: true, collection: 'global_message_stats' }
+);
 
-        return new Promise(async (resolve, reject) => {
-            try {
-                message.reply({ content: 'Pong.' + `${client.configs.emojis.success}` });
-
-                resolve(true);
-            } catch (error) {
-                client.out.error('&fError in &6' + __dirname + '&f/&9' + this.name + ' &fCommand &c', error);
-                reject(error);
-            }
-        });
-    }
-};
+module.exports = mongoose.models.GlobalMessageStats || model('GlobalMessageStats', GlobalMessageStatsSchema);

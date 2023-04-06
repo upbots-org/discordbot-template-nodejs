@@ -26,4 +26,4 @@
  * @since 1.0.0
  */
 
-module.exports = [['upbots.org']];
+module.exports = [['TicketUp', 'Upbots.org']];

@@ -17,7 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-'use strict'; // https://www.w3schools.com/js/js_strict.asp
+'use strict';
+const { ChatInputCommandInteraction, Client } = require('discord.js');
+
+// https://www.w3schools.com/js/js_strict.asp
 
 /**********************************************************************/
 
@@ -28,7 +31,12 @@
 
 module.exports = {
     name: 'interactionCreate',
-
+    /**
+     *
+     * @param {ChatInputCommandInteraction} interaction
+     * @param {Client} client
+     * @returns
+     */
     async execute(interaction, client) {
         // Checks if the interaction is a command (to prevent weird bugs)
 

@@ -35,11 +35,13 @@
     },
     "dependencies": {
         "@discordjs/rest": "^1.6.0",
+        "@whackdevelopment/snowflakeid": "^1.0.1",
         "discord-api-types": "^0.37.37",
         "discord.js": "^14.8.0",
         "dotenv": "^16.0.3",
         "is-valid-domain": "^0.1.6",
         "mongoose": "^7.0.3",
+        "mongoose-autopopulate": "^1.0.0",
         "node-fetch": "^3.3.1",
         "string-similarity": "^4.0.4"
     }
