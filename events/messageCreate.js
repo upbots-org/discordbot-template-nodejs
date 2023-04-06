@@ -49,7 +49,7 @@ module.exports = {
         // You can change the behavior as per your liking at ./messages/onMention.js
         // TODO: add translation
         if (message.content == `<@${client.user.id}>` || message.content == `<@!${client.user.id}>`) {
-            require('../messages/onMention').execute(message);
+            require('../messages/onMention').execute(message, client);
             return;
         }
 
