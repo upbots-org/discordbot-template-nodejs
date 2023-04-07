@@ -28,5 +28,14 @@
 
 module.exports = {
     join: 'https://cdn.discordapp.com/attachments/1091668606011592804/1093919968229339306/join.png',
-    leave: 'https://cdn.discordapp.com/attachments/1091668606011592804/1093919968518742147/leave.png'
+    leave: 'https://cdn.discordapp.com/attachments/1091668606011592804/1093919968518742147/leave.png',
+
+    autocomplete: 'https://cdn.discordapp.com/attachments/1093631825794048100/1093976569829150750/1074155720498499644.png',
+    button: 'https://cdn.discordapp.com/attachments/1093631825794048100/1093976569829150750/1074155720498499644.png',
+    context: 'https://cdn.discordapp.com/attachments/1093631825794048100/1093976569829150750/1074155720498499644.png',
+    modal: 'https://cdn.discordapp.com/attachments/1093631825794048100/1093976569829150750/1074155720498499644.png',
+    command: 'https://cdn.discordapp.com/attachments/1093631825794048100/1093976569829150750/1074155720498499644.png',
+    select: 'https://cdn.discordapp.com/attachments/1093631825794048100/1093976569829150750/1074155720498499644.png',
+    slashcommand: 'https://cdn.discordapp.com/attachments/1093631825794048100/1093976569829150750/1074155720498499644.png',
+    trigger: 'https://cdn.discordapp.com/attachments/1093631825794048100/1093976569829150750/1074155720498499644.png'
 };

@@ -50,6 +50,10 @@ module.exports = {
 
         const guildSettings = require('../models/guilds/GuildSettings');
 
+        const color = require('../configurations/colors');
+        const logsConfig = require('../configurations/logs');
+        const avatar = require('../configurations/avatars');
+
         const { success, error, join, leave } = require('../configurations/colors');
 
         let dataGuildSettings = null;
@@ -207,9 +211,21 @@ module.exports = {
 
         // LOG CHANNEL
 
-        const webhook = new WebhookClient({ url: client.configs.logs.otherWebhookUrl });
+        const forumChannel = client.channels.cache.get(logsConfig.otherForumChannelId);
 
-        await webhook.edit({ name: 'JOIN', avatar: client.configs.avatars.join });
+        if (!forumChannel) return client.out.alert('No forumChannel found', this.name);
+
+        const webhooks = await forumChannel.fetchWebhooks();
+
+        let webhook = null;
+
+        if (webhooks.find((x) => x.name == logsConfig.webhookName)) {
+            webhook = new WebhookClient({ url: webhooks.find((x) => x.name == logsConfig.webhookName).url });
+        } else {
+            webhook = await forumChannel.createWebhook({ name: logsConfig.webhookName, avatar: client.user.displayAvatarURL() });
+        }
+
+        await webhook.edit({ name: 'Join', avatar: avatar.join });
 
         webhook
             .send({
@@ -237,5 +253,7 @@ module.exports = {
             .catch((err) => {
                 client.out.alert('Failed sending guildJoin Log into log channel', this.name);
             });
+
+        await webhook.edit({ name: logsConfig.webhookName, avatar: client.user.displayAvatarURL() });
     }
 };

@@ -39,6 +39,10 @@ module.exports = {
     async execute(guild, client) {
         const GuildSettings = require('../models/guilds/GuildSettings');
 
+        const color = require('../configurations/colors');
+        const logsConfig = require('../configurations/logs');
+        const avatar = require('../configurations/avatars');
+
         let dataGuildSettings = null;
 
         dataGuildSettings = await GuildSettings.findOne({ id: guild.id });
@@ -72,10 +76,21 @@ module.exports = {
         }
 
         // Send LeaveLog in other logs
+        const forumChannel = client.channels.cache.get(logsConfig.otherForumChannelId);
 
-        const webhook = new WebhookClient({ url: client.configs.logs.otherWebhookUrl });
+        if (!forumChannel) return client.out.alert('No forumChannel found', this.name);
 
-        await webhook.edit({ name: 'LEAVE', avatar: client.configs.avatars.leave });
+        const webhooks = await forumChannel.fetchWebhooks();
+
+        let webhook = null;
+
+        if (webhooks.find((x) => x.name == logsConfig.webhookName)) {
+            webhook = new WebhookClient({ url: webhooks.find((x) => x.name == logsConfig.webhookName).url });
+        } else {
+            webhook = await forumChannel.createWebhook({ name: logsConfig.webhookName, avatar: client.user.displayAvatarURL() });
+        }
+
+        await webhook.edit({ name: 'Leave', avatar: avatar.leave });
 
         webhook.send({
             embeds: [
@@ -95,5 +110,9 @@ module.exports = {
         // Deleting Data
 
         await GuildSettings.findOneAndDelete({ id: guild.id });
+
+        //
+
+        await webhook.edit({ name: logsConfig.webhookName, avatar: client.user.displayAvatarURL() });
     }
 };

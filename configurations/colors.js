@@ -28,23 +28,20 @@
 
 module.exports = {
     default: '#d68888', // Default color used for most embeds.
-    error: '#b9918c', // Color used for error messages.
-    attention: '#e3e1ac', // Color used for messages that require attention.
-    information: '#8da6ba', // Color used for informational messages.
-    success: '#9eb98c', // Color used for messages indicating success.
-    command: '#cdace3', // Color used for command-related embeds.
-    button: '#a78cb8', // Color used for button-related embeds.
-    modal: '#5a4b63', // Color used for modal-related embeds.
-    selectmenu: '#ceace2', // Color used for select menu-related embeds.
+    error: '#d6b589', // Color used for error messages.
+    attention: '#d4d689', // Color used for messages that require attention.
+    information: '#89d6c8', // Color used for informational messages.
+    success: '#89d694', // Color used for messages indicating success.
+
+    autocomplete: '#8c94d6',
+    button: '#d69489',
+    context: '#d68994',
+    modal: '#94d68c',
+    command: '#89d6b7',
+    select: '#d6b789',
+    slashcommand: '#b789d6',
+    trigger: '#d694b7',
 
     join: '#8bd689',
-    leave: '#d6b889',
-
-    // Object containing color codes for different types of invite embeds.
-    invite: {
-        fake: '#bab78d', // Color used for fake invites.
-        valid: '#8dbaa6', // Color used for valid invites.
-        vanity: '#8da2ba', // Color used for vanity invites.
-        unknow: '#ba8db3' // Color used for unknown invite types.
-    }
+    leave: '#d6b889'
 };

@@ -46,6 +46,10 @@ module.exports = {
 
         // If the interaction is not a command in cache.
 
+        const color = require('../configurations/colors');
+        const logs = require('../configurations/logs');
+        const avatar = require('../configurations/avatars');
+
         if (!command) return;
 
         let d = new Date();
@@ -207,7 +211,21 @@ module.exports = {
 
         // Logs
 
-        const webhook = new WebhookClient({ url: client.configs.logs.webhookUrl });
+        const forumChannel = client.channels.cache.get(logs.interactionsForumChannelId);
+
+        if (!forumChannel) return client.out.alert('No forumChannel found', this.name);
+
+        const webhooks = await forumChannel.fetchWebhooks();
+
+        let webhook = null;
+
+        if (webhooks.find((x) => x.name == logs.webhookName)) {
+            webhook = new WebhookClient({ url: webhooks.find((x) => x.name == logs.webhookName).url });
+        } else {
+            webhook = await forumChannel.createWebhook({ name: logs.webhookName, avatar: client.user.displayAvatarURL() });
+        }
+
+        await webhook.edit({ name: 'SlashCommand', avatar: avatar.slashcommand });
 
         // This command's stats in every guild (total time)
 
@@ -230,6 +248,8 @@ module.exports = {
                 e += x.slashCommands.find((x) => x.id === interaction.commandId).count;
             }
         });
+
+        let webhookGuilds = null;
 
         if (interaction.guild) {
             // This command's stats in this guild (total time)
@@ -272,7 +292,7 @@ module.exports = {
                 .send({
                     embeds: [
                         new EmbedBuilder()
-                            .setColor(client.configs.colors.default)
+                            .setColor(color.slashcommand)
                             .setFooter({
                                 text: client.configs.footer.defaultText,
                                 iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : ''
@@ -302,16 +322,26 @@ module.exports = {
                     client.out.error(err);
                 });
 
-            const webhookGuilds = new WebhookClient({ url: client.configs.logs.guildsForumWebhookUrl });
+            const forumChannelGuilds = client.channels.cache.get(logs.guildsForumChannelId);
+
+            if (!forumChannelGuilds) return client.out.alert('No forumChannelGuilds found', this.name);
+
+            const webhooksGuildss = await forumChannelGuilds.fetchWebhooks();
+
+            if (webhooksGuildss.find((x) => x.name == logs.webhookName)) {
+                webhookGuilds = new WebhookClient({ url: webhooksGuildss.find((x) => x.name == logs.webhookName).url });
+            } else {
+                webhookGuilds = await forumChannelGuilds.createWebhook({ name: logs.webhookName, avatar: client.user.displayAvatarURL() });
+            }
+
+            await webhookGuilds.edit({ name: 'SlashCommand', avatar: avatar.slashcommand });
 
             if (webhookGuilds) {
-                await webhookGuilds.edit({ name: interaction.guild.name, avatar: interaction.guild.iconURL() });
-
                 webhookGuilds
                     .send({
                         embeds: [
                             new EmbedBuilder()
-                                .setColor(client.configs.colors.default)
+                                .setColor(color.slashcommand)
                                 .setFooter({
                                     text: client.configs.footer.defaultText,
                                     iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : ''
@@ -368,7 +398,7 @@ module.exports = {
                 .send({
                     embeds: [
                         new EmbedBuilder()
-                            .setColor(client.configs.colors.default)
+                            .setColor(color.slashcommand)
                             .setFooter({
                                 text: client.configs.footer.defaultText,
                                 iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : ''
@@ -394,5 +424,8 @@ module.exports = {
                     client.out.error(err);
                 });
         }
+
+        await webhook.edit({ name: logs.webhookName, avatar: client.user.displayAvatarURL() });
+        await webhookGuilds.edit({ name: logs.webhookName, avatar: client.user.displayAvatarURL() });
     }
 };
