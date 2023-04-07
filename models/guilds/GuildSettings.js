@@ -35,7 +35,9 @@ const GuildSettingsSchema = new Schema(
         id: { type: String, required: true },
         language: { type: String, required: true, default: 'en_us' },
         announcementWebhookUrl: { type: String, default: null },
-        threadId: { type: String, default: null }
+        threadId: { type: String, default: null },
+        addedById: { type: String, default: null },
+        setupMessageId: { type: String, default: null }
     },
     { timestamps: true, collection: 'guild_settings' }
 );

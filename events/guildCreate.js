@@ -26,7 +26,17 @@
  * @since 1.0.0
  */
 
-const { Guild, Client, EmbedBuilder, WebhookClient } = require('discord.js');
+const {
+    Guild,
+    Client,
+    EmbedBuilder,
+    WebhookClient,
+    AuditLogEvent,
+    ActionRowBuilder,
+    ButtonBuilder,
+    StringSelectMenuBuilder,
+    ButtonStyle
+} = require('discord.js');
 
 module.exports = {
     name: 'guildCreate',
@@ -40,6 +50,8 @@ module.exports = {
 
         const guildSettings = require('../models/guilds/GuildSettings');
 
+        const { success, error, join, leave } = require('../configurations/colors');
+
         let dataGuildSettings = null;
 
         dataGuildSettings = await guildSettings.findOne({ id: guild.id });
@@ -52,10 +64,64 @@ module.exports = {
             id: guild.id,
             announcementWebhookUrl: null,
             threadId: null,
-            language: 'en_us'
+            language: 'en_us',
+            setupMessageId: null,
+            addedById: null
         });
 
         dataGuildSettings = await guildSettings.findOne({ id: guild.id });
+
+        // Fetching Audit-Logs and AddedByUser
+
+        const fetchLogs = await guild?.fetchAuditLogs({ type: AuditLogEvent.BotAdd, limit: 1 });
+        const logs = fetchLogs?.entries?.first();
+
+        let messageId = null;
+
+        if (logs) {
+            try {
+                messageId = await logs.executor.send({
+                    embeds: [
+                        new EmbedBuilder()
+                            .setColor(client.configs.colors.default)
+                            .setTitle(`Hey ${logs.executor.tag}!`)
+                            .setDescription(`> Thank you for adding me to your Server!\n\n> Choose your language below!`)
+                            .setFooter({
+                                text: client.configs.footer.defaultText,
+                                iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
+                            })
+                            .setTimestamp()
+                    ],
+                    components: [
+                        new ActionRowBuilder().addComponents(
+                            new StringSelectMenuBuilder()
+                                .setCustomId('language')
+                                .setPlaceholder('Choose your langauge')
+                                .setMaxValues(1)
+                                .addOptions([
+                                    { label: 'Deutsch', emoji: '🇩🇪', value: 'de_de' },
+                                    { label: 'English (US)', emoji: '🇺🇸', value: 'en_us' }
+                                ])
+                        ),
+                        new ActionRowBuilder().addComponents(
+                            new ButtonBuilder()
+                                .setURL(`${client.configs.general.supportServerInviteUrl}`)
+                                .setStyle(ButtonStyle.Link)
+                                .setLabel('Support Server')
+                        )
+                    ]
+                });
+
+                dataGuildSettings.addedById = logs.executor.id;
+                dataGuildSettings.setupMessageId = messageId.id;
+
+                await dataGuildSettings.save();
+            } catch (err) {
+                client.out.alert('Error while sending DM to user', this.name, err);
+            }
+        }
+
+        // Creating Forum Post & Logs
 
         const forum = client.channels.cache.get(client.configs.logs.guildsForumChannelId);
 
@@ -80,7 +146,7 @@ module.exports = {
                 x.send({
                     embeds: [
                         new EmbedBuilder()
-                            .setColor('Green')
+                            .setColor(join)
                             .setDescription(`> Joined again **${guild.name}**`)
                             .setFooter({
                                 text: client.configs.footer.defaultText,
@@ -89,27 +155,41 @@ module.exports = {
                             .setTimestamp()
                     ]
                 });
+
+                thread.setAppliedTags([client.configs.logs.onGuildTagId]);
             } else {
                 thread = await forum.threads.create({
                     name: `${guild.id} - ${guild.name}`,
                     message: {
                         embeds: [
                             new EmbedBuilder()
-                                .setColor(client.configs.colors.default)
-                                .setDescription(`> Informations about **${guild.name}**`)
+                                .setColor(join)
+                                .setThumbnail(guild.iconURL())
+                                .setDescription(
+                                    `> Joined **${guild.name}**\n\n> __**Informations**__\n→ Name: **${guild.name}**\n→ Id: **${
+                                        guild.id
+                                    }**\n→ MemberCount: **${guild.memberCount}**\n→ Owner: **${
+                                        client.users.cache.get(guild.ownerId).tag
+                                    }** (||${client.users.cache.get(guild.ownerId).id}||)\n→ AddeyBy: **${
+                                        logs?.executor?.tag || 'unknow'
+                                    }** (||${logs?.executor?.id || 'unknow'}||)\n→ Permissions: \`\`\`${guild.members.me.permissions
+                                        .toArray()
+                                        .join(` `)}\`\`\``
+                                )
                                 .setFooter({
                                     text: client.configs.footer.defaultText,
                                     iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
                                 })
                                 .setTimestamp()
                         ]
-                    }
+                    },
+                    appliedTags: [`${client.configs.logs.onGuildTagId}`]
                 });
 
                 thread.send({
                     embeds: [
                         new EmbedBuilder()
-                            .setColor('Green')
+                            .setColor(join)
                             .setDescription(`> Joined **${guild.name}**`)
                             .setFooter({
                                 text: client.configs.footer.defaultText,
@@ -127,8 +207,35 @@ module.exports = {
 
         // LOG CHANNEL
 
-        const webhook = new WebhookClient({ url: '' });
+        const webhook = new WebhookClient({ url: client.configs.logs.otherWebhookUrl });
 
-        webhook.send({ embeds: [], threadId: client.configs.logs.guildLogThreadId });
+        await webhook.edit({ name: 'JOIN', avatar: client.configs.avatars.join });
+
+        webhook
+            .send({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(join)
+                        .setThumbnail(guild.iconURL())
+                        .setDescription(
+                            `> Joined **${guild.name}**\n\n> __**Informations**__\n→ Name: **${guild.name}**\n→ Id: **${
+                                guild.id
+                            }**\n→ MemberCount: **${guild.memberCount}**\n→ Owner: **${client.users.cache.get(guild.ownerId).tag}** (||${
+                                client.users.cache.get(guild.ownerId).id
+                            }||)\n→ AddeyBy: **${logs?.executor?.tag || 'unknow'}** (||${
+                                logs?.executor?.id || 'unknow'
+                            }||)\n→ Permissions: \`\`\`${guild.members.me.permissions.toArray().join(` `)}\`\`\``
+                        )
+                        .setFooter({
+                            text: client.configs.footer.defaultText,
+                            iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
+                        })
+                        .setTimestamp()
+                ],
+                threadId: client.configs.logs.guildLogThreadId
+            })
+            .catch((err) => {
+                client.out.alert('Failed sending guildJoin Log into log channel', this.name);
+            });
     }
 };

@@ -26,18 +26,7 @@
  * @since 1.0.0
  */
 
-// This module exports a configuration object for a Discord bot
-
 module.exports = {
-    webhookUrl: 'https://discord.com/api/webhooks/1093631900360388618/0XlIKWGMovfRYYhdc-LMAxXioDK_olh-rFqlj5M5W_aCvXjm7f5W5QEVW58eXKZDAh-y',
-    categoryId: '1091667141163503716',
-    guildsForumChannelId: '1091667196972912710',
-    onGuildTagId: '1093920633957650554',
-    offGuildTagId: '1093920679738495047',
-    guildsForumWebhookUrl:
-        'https://discord.com/api/webhooks/1093888462857437286/AQvAQPOKEKoiBdDZZfaVZVDDMuD8qwuFP8XUk6FQvimAE06cpHl2AuDTauvpHkwMzBZe',
-    guildLogThreadId: '1091668606011592804',
-    otherWebhookUrl:
-        'https://discord.com/api/webhooks/1091669025454559302/M9IyhJofakPQpVul-j-J_YQROFGQWZKmoc7QGC2VP94DalHKtElJpLjG4dzyDJ0hAv0c',
-    slashThreadId: '1093631825794048100'
+    join: 'https://cdn.discordapp.com/attachments/1091668606011592804/1093919968229339306/join.png',
+    leave: 'https://cdn.discordapp.com/attachments/1091668606011592804/1093919968518742147/leave.png'
 };

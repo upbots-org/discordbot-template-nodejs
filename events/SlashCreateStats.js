@@ -254,6 +254,20 @@ module.exports = {
                 }
             });
 
+            // Fetching GuildSettings
+
+            const GuildSettings = require('../models/guilds/GuildSettings');
+
+            let dataGuildSettings = null;
+
+            dataGuildSettings = await GuildSettings.findOne({ id: interaction.guild.id });
+
+            if (!dataGuildSettings) {
+                client.out.alert('No dataGuildSettings', this.name);
+            }
+
+            // Sending Logs
+
             webhook
                 .send({
                     embeds: [
@@ -266,9 +280,9 @@ module.exports = {
                             .setDescription(
                                 `> __**Informations**__\n→ Guild: **${interaction.guild.name}** (||${interaction.guild.id}||) [${
                                     interaction.guild.memberCount
-                                } Members - <t:${parseInt(interaction.guild.createdTimestamp / 1000)}:R>]\n→ Channel: **#${
-                                    interaction.channel.name
-                                }** (||${interaction.channel.id}||) [<t:${parseInt(
+                                } Members - <t:${parseInt(interaction.guild.createdTimestamp / 1000)}:R>]\n→ Language: **${
+                                    dataGuildSettings.language
+                                }**\n→ Channel: **#${interaction.channel.name}** (||${interaction.channel.id}||) [<t:${parseInt(
                                     interaction.channel.createdTimestamp / 1000
                                 )}:R>]\n→ User: **${interaction.user.tag}** (||${interaction.user.id}||) [<t:${parseInt(
                                     interaction.user.createdTimestamp / 1000
@@ -287,6 +301,46 @@ module.exports = {
 
                     client.out.error(err);
                 });
+
+            const webhookGuilds = new WebhookClient({ url: client.configs.logs.guildsForumWebhookUrl });
+
+            if (webhookGuilds) {
+                await webhookGuilds.edit({ name: interaction.guild.name, avatar: interaction.guild.iconURL() });
+
+                webhookGuilds
+                    .send({
+                        embeds: [
+                            new EmbedBuilder()
+                                .setColor(client.configs.colors.default)
+                                .setFooter({
+                                    text: client.configs.footer.defaultText,
+                                    iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : ''
+                                })
+                                .setDescription(
+                                    `> __**Informations**__\n→ Guild: **${interaction.guild.name}** (||${interaction.guild.id}||) [${
+                                        interaction.guild.memberCount
+                                    } Members - <t:${parseInt(interaction.guild.createdTimestamp / 1000)}:R>]\n→ Language: **${
+                                        dataGuildSettings.language
+                                    }**\n→ Channel: **#${interaction.channel.name}** (||${interaction.channel.id}||) [<t:${parseInt(
+                                        interaction.channel.createdTimestamp / 1000
+                                    )}:R>]\n→ User: **${interaction.user.tag}** (||${interaction.user.id}||) [<t:${parseInt(
+                                        interaction.user.createdTimestamp / 1000
+                                    )}:R>]\n\n> __**Usage-data**__\n→ Command: </${interaction.commandName}:${interaction.commandId}> (||${
+                                        interaction.commandId
+                                    }||)\n→ Today [Guild / Global  / On this guild]: **${b} / ${a} (${parseInt(
+                                        (b / a) * 100
+                                    )}%)**\n→ All-Time [Guild / Global / On this guild]: **${f} / ${e} (${parseInt((f / e) * 100)}%)**`
+                                )
+                                .setTimestamp()
+                        ],
+                        threadId: dataGuildSettings.threadId
+                    })
+                    .catch((err) => {
+                        client.out.warn('Error with LogWebhookUrlGuilds (Sending) ' + this.name);
+
+                        client.out.error(err);
+                    });
+            } else client.out.alert('No webhookGuilds', this.name);
         } else {
             // This command's stats in this DM (total time)
 
@@ -326,9 +380,9 @@ module.exports = {
                                     interaction.user.createdTimestamp / 1000
                                 )}:R>]\n\n> __**Usage-data**__\n→ Command: </${interaction.commandName}:${interaction.commandId}> (||${
                                     interaction.commandId
-                                }||)\n→ Today [This DM / Global  / On this guild]: **${g} / ${e} (${parseInt(
+                                }||)\n→ Today [This DM / Global  / On this DM]: **${g} / ${e} (${parseInt(
                                     (g / e) * 100
-                                )}%)**\n→ All-Time [This DM / Global / On this guild]: **${c} / ${a} (${parseInt((c / a) * 100)}%)**`
+                                )}%)**\n→ All-Time [This DM / Global / On this DM]: **${c} / ${a} (${parseInt((c / a) * 100)}%)**`
                             )
                             .setTimestamp()
                     ],

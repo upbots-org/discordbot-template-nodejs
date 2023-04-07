@@ -37,6 +37,9 @@ module.exports = {
     modal: '#5a4b63', // Color used for modal-related embeds.
     selectmenu: '#ceace2', // Color used for select menu-related embeds.
 
+    join: '#8bd689',
+    leave: '#d6b889',
+
     // Object containing color codes for different types of invite embeds.
     invite: {
         fake: '#bab78d', // Color used for fake invites.

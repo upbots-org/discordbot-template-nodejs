@@ -37,5 +37,7 @@ module.exports = {
     defaultLanguage: 'en_us',
     testGuildId: '930837601341022268',
     clientId: '1091664896749473903',
-    owner: '801860642402467850'
+    owner: '801860642402467850',
+    supportServerInviteUrl: 'https://discord.gg/WJjzEPXQTF',
+    inviteUrl: 'https://discord.com/oauth2/authorize?client_id=1030248474937131018&permissions=805685441&scope=applications.commands%20bot'
 };
