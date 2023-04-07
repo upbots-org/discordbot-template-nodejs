@@ -316,7 +316,7 @@ module.exports = {
                             )
                             .setTimestamp()
                     ],
-                    threadId: client.configs.logs.slashThreadId
+                    threadId: client.configs.logs.buttonThreadId
                 })
                 .catch((err) => {
                     client.out.warn('Error with LogWebhookUrl (Sending) ' + this.name);
@@ -418,7 +418,7 @@ module.exports = {
                             )
                             .setTimestamp()
                     ],
-                    threadId: client.configs.logs.slashThreadId
+                    threadId: client.configs.logs.buttonThreadId
                 })
                 .catch((err) => {
                     client.out.warn('Error with LogWebhookUrl (Sending) ' + this.name);

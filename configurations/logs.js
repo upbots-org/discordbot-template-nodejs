@@ -42,5 +42,6 @@ module.exports = {
     offGuildTagId: '1093920679738495047',
 
     guildLogThreadId: '1091668606011592804',
-    slashThreadId: '1093631825794048100'
+    slashThreadId: '1093631825794048100',
+    buttonThreadId: '1091668147800637521'
 };
