@@ -26,18 +26,14 @@
  * @since 1.0.0
  */
 
-const mongoose = require('mongoose');
+// This module exports a configuration object for a Discord bot
 
-const { Schema, model } = mongoose;
-
-const GuildSettingsSchema = new Schema(
-    {
-        id: { type: String, required: true },
-        language: { type: String, required: true, default: 'en_us' },
-        announcementWebhookUrl: { type: String, default: null },
-        threadId: { type: String, default: null }
-    },
-    { timestamps: true, collection: 'guild_settings' }
-);
-
-module.exports = mongoose.models.GuildSettings || model('GuildSettings', GuildSettingsSchema);
+module.exports = {
+    webhookUrl: 'https://discord.com/api/webhooks/1093631900360388618/0XlIKWGMovfRYYhdc-LMAxXioDK_olh-rFqlj5M5W_aCvXjm7f5W5QEVW58eXKZDAh-y',
+    categoryId: '1091667141163503716',
+    guildsForumChannelId: '1091667196972912710',
+    guildsForumWebhookUrl:
+        'https://discord.com/api/webhooks/1093888462857437286/AQvAQPOKEKoiBdDZZfaVZVDDMuD8qwuFP8XUk6FQvimAE06cpHl2AuDTauvpHkwMzBZe',
+    guildLogThreadId: '1091668606011592804',
+    slashThreadId: '1093631825794048100'
+};

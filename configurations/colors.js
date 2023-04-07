@@ -27,7 +27,7 @@
  */
 
 module.exports = {
-    default: '#8cb4b9', // Default color used for most embeds.
+    default: '#d68888', // Default color used for most embeds.
     error: '#b9918c', // Color used for error messages.
     attention: '#e3e1ac', // Color used for messages that require attention.
     information: '#8da6ba', // Color used for informational messages.

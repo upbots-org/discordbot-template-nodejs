@@ -26,18 +26,9 @@
  * @since 1.0.0
  */
 
-const mongoose = require('mongoose');
-
-const { Schema, model } = mongoose;
-
-const GuildSettingsSchema = new Schema(
-    {
-        id: { type: String, required: true },
-        language: { type: String, required: true, default: 'en_us' },
-        announcementWebhookUrl: { type: String, default: null },
-        threadId: { type: String, default: null }
-    },
-    { timestamps: true, collection: 'guild_settings' }
-);
-
-module.exports = mongoose.models.GuildSettings || model('GuildSettings', GuildSettingsSchema);
+module.exports = {
+    defaultText: 'Powered by upbots.org',
+    defaultIcon:
+        'https://images-ext-2.discordapp.net/external/BPYpI_jnA9jo_oyym4qrGGDf2w2jPtuLftafVJ5eQ-g/https/i.ibb.co/26V0CL6/upbots-org-1.png?width=625&height=625',
+    displayIcon: true
+};

@@ -38,7 +38,7 @@ module.exports = {
 
         return new Promise(async (resolve, reject) => {
             try {
-                message.reply({ content: 'Pong.' + `${client.configs.emojis.success}` });
+                message.reply({ content: 'Pong.' + `${client.configs.icons.success}` });
 
                 resolve(true);
             } catch (error) {

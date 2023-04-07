@@ -21,23 +21,39 @@
 
 /**********************************************************************/
 
+const { Message, Client } = require('discord.js');
+
 /**
  * @author LuciferMorningstarDev
  * @since 1.0.0
  */
 
-const mongoose = require('mongoose');
-
-const { Schema, model } = mongoose;
-
-const GuildSettingsSchema = new Schema(
-    {
-        id: { type: String, required: true },
-        language: { type: String, required: true, default: 'en_us' },
-        announcementWebhookUrl: { type: String, default: null },
-        threadId: { type: String, default: null }
+module.exports = {
+    name: 'emit',
+    ownerOnly: true,
+    category: __dirname,
+    description: async function (prefix, name) {
+        return prefix + name;
     },
-    { timestamps: true, collection: 'guild_settings' }
-);
+    /**
+     *
+     * @param {Message} message
+     * @param {*} args
+     * @returns
+     */
+    async execute(message, args) {
+        const { client, guild, channel, content, author } = message;
+        const { prefix, owner } = client.configs.general;
 
-module.exports = mongoose.models.GuildSettings || model('GuildSettings', GuildSettingsSchema);
+        return new Promise(async (resolve, reject) => {
+            try {
+                client.emit('guildCreate', message.guild);
+
+                resolve(true);
+            } catch (error) {
+                client.out.error('&fError in &6' + __dirname + '&f/&9' + this.name + ' &fCommand &c', error);
+                reject(error);
+            }
+        });
+    }
+};

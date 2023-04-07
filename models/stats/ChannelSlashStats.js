@@ -30,14 +30,14 @@ const mongoose = require('mongoose');
 
 const { Schema, model } = mongoose;
 
-const GuildSettingsSchema = new Schema(
+const ChannelSlashStatsSchema = new Schema(
     {
-        id: { type: String, required: true },
-        language: { type: String, required: true, default: 'en_us' },
-        announcementWebhookUrl: { type: String, default: null },
-        threadId: { type: String, default: null }
+        guildId: { type: String, required: true },
+        channelId: { type: String, required: true },
+        userId: { type: String, required: true },
+        slashCommands: [{ id: { type: String, default: null, required: true }, count: { type: Number, default: 0, required: true } }],
+        date: { type: Date, required: true }
     },
-    { timestamps: true, collection: 'guild_settings' }
+    { timestamps: true, collection: 'channel_slash_stats' }
 );
-
-module.exports = mongoose.models.GuildSettings || model('GuildSettings', GuildSettingsSchema);
+module.exports = mongoose.models.ChannelSlashStats || model('ChannelSlashStats', ChannelSlashStatsSchema);

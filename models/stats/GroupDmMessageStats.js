@@ -30,14 +30,14 @@ const mongoose = require('mongoose');
 
 const { Schema, model } = mongoose;
 
-const GuildSettingsSchema = new Schema(
+const GroupDmMessageStatsSchema = new Schema(
     {
-        id: { type: String, required: true },
-        language: { type: String, required: true, default: 'en_us' },
-        announcementWebhookUrl: { type: String, default: null },
-        threadId: { type: String, default: null }
+        groupDmChannelId: { type: String, required: true },
+        userId: { type: String, required: true },
+        messages: { type: Number, required: true, default: 0 },
+        date: { type: Date, required: true }
     },
-    { timestamps: true, collection: 'guild_settings' }
+    { timestamps: true, collection: 'groupdm_message_stats' }
 );
 
-module.exports = mongoose.models.GuildSettings || model('GuildSettings', GuildSettingsSchema);
+module.exports = mongoose.models.GroupDmMessageStats || model('GroupDmMessageStats', GroupDmMessageStatsSchema);

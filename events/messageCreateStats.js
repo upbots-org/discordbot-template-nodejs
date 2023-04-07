@@ -46,15 +46,16 @@ module.exports = {
         d.setHours(0, 0, 0, 0);
 
         const ChannelMessageStats = require('../models/stats/ChannelMessageStats');
-        const GlobalMessageStats = require('../models/stats/GlobalMessagesStats');
+        const GlobalMessageStats = require('../models/stats/GlobalMessageStats');
         const GuildMessageStats = require('../models/stats/GuildMessageStats');
         const DmMessageStats = require('../models/stats/DmMessageStats');
+        const GroupDmMessageStats = require('../models/stats/GroupDmMessageStats');
 
         // DmMessageStats
 
         let dataDmMessageStats;
 
-        if (message?.channel?.type == ChannelType.DM || message?.channel?.type == ChannelType.GroupDM) {
+        if (message?.channel?.type == ChannelType.DM) {
             dataDmMessageStats = await DmMessageStats.findOne({
                 date: d,
                 userId: message.author.id,
@@ -68,6 +69,31 @@ module.exports = {
             } else {
                 dataDmMessageStats = await DmMessageStats.create({
                     dmChannelId: message.channel.id,
+                    userId: message.author.id,
+                    messages: 1,
+                    date: d
+                });
+            }
+        }
+
+        // GroupDmMessageStats
+
+        let dataGroupDmMessageStats;
+
+        if (message?.channel?.type == ChannelType.GroupDM) {
+            dataGroupDmMessageStats = await GroupDmMessageStats.findOne({
+                date: d,
+                userId: message.author.id,
+                groupDmChannelId: message.channel.id
+            });
+
+            if (dataGroupDmMessageStats) {
+                dataGroupDmMessageStats.messages += 1;
+
+                dataGroupDmMessageStats.save();
+            } else {
+                dataGroupDmMessageStats = await GroupDmMessageStats.create({
+                    groupDmChannelId: message.channel.id,
                     userId: message.author.id,
                     messages: 1,
                     date: d

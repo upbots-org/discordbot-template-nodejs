@@ -21,23 +21,24 @@
 
 /**********************************************************************/
 
+const { SlashCommandBuilder } = require('discord.js');
+
 /**
  * @author LuciferMorningstarDev
  * @since 1.0.0
  */
+module.exports = {
+    // The data needed to register slash commands to Discord.
+    data: new SlashCommandBuilder().setName('ping').setDescription('Just a Sample Command.'),
 
-const mongoose = require('mongoose');
-
-const { Schema, model } = mongoose;
-
-const GuildSettingsSchema = new Schema(
-    {
-        id: { type: String, required: true },
-        language: { type: String, required: true, default: 'en_us' },
-        announcementWebhookUrl: { type: String, default: null },
-        threadId: { type: String, default: null }
-    },
-    { timestamps: true, collection: 'guild_settings' }
-);
-
-module.exports = mongoose.models.GuildSettings || model('GuildSettings', GuildSettingsSchema);
+    async execute(interaction, client) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                resolve(true);
+            } catch (error) {
+                client.out.error('&fError in &6' + __dirname + '&f/&9' + this.data.name + ' &fSlashCommand &c', error);
+                reject(error);
+            }
+        });
+    }
+};
