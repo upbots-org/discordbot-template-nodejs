@@ -30,7 +30,7 @@ const { ButtonInteraction, Client } = require('discord.js');
  */
 
 module.exports = {
-    id: 'sample',
+    id: 'hi',
     /**
      *
      * @param {ButtonInteraction} interaction
@@ -41,16 +41,9 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             try {
                 // Preparation for the autocomplete request.
-                const focusedValue = interaction.options.getFocused();
 
-                // Extract choices automatically from your choice array (can be dynamic too)!
-                const choices = ['your', 'choices'];
+                interaction.channel.send({ content: 'hi' });
 
-                // Filter choices according to user input.
-                const filtered = choices.filter((choice) => choice.startsWith(focusedValue));
-
-                // Respond the request here.
-                interaction.respond(filtered.map((choice) => ({ name: choice, value: choice })));
                 resolve(true);
             } catch (error) {
                 client.out.error('&fError in &6' + __dirname + '&f/&9' + this.id + ' &fButtonInteraction &c', error);

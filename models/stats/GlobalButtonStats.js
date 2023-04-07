@@ -21,33 +21,22 @@
 
 /**********************************************************************/
 
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-
 /**
  * @author LuciferMorningstarDev
  * @since 1.0.0
  */
-module.exports = {
-    // The data needed to register slash commands to Discord.
-    data: new SlashCommandBuilder().setName('sample').setDescription('Just a Sample Command.'),
 
-    async execute(interaction, client) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                interaction.reply({
-                    content: 'Hi!',
-                    components: [
-                        new ActionRowBuilder().addComponents(
-                            new ButtonBuilder().setCustomId('hi').setLabel('Hey').setStyle(ButtonStyle.Primary)
-                        )
-                    ]
-                });
+const mongoose = require('mongoose');
 
-                resolve(true);
-            } catch (error) {
-                client.out.error('&fError in &6' + __dirname + '&f/&9' + this.data.name + ' &fSlashCommand &c', error);
-                reject(error);
-            }
-        });
-    }
-};
+const { Schema, model } = mongoose;
+
+const GlobalButtonStatsSchema = new Schema(
+    {
+        userId: { type: String, required: true },
+        buttons: [{ id: { type: String, default: null, required: true }, count: { type: Number, default: 0, required: true } }],
+        date: { type: Date, required: true }
+    },
+    { timestamps: true, collection: 'global_button_stats' }
+);
+
+module.exports = mongoose.models.GlobalButtonStats || model('GlobalButtonStats', GlobalButtonStatsSchema);
