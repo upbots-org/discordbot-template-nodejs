@@ -229,21 +229,21 @@ module.exports = {
 
         // This Button's stats in every guild (total time)
 
-        const dataGlobalSlashCount = await GlobalButtonStats.find({});
+        const dataGlobalButtonCount = await GlobalButtonStats.find({});
 
         let a = 0;
 
-        dataGlobalSlashCount.forEach((x) => {
+        dataGlobalButtonCount.forEach((x) => {
             if (x.buttons.find((x) => x.id === interaction.customId)) {
                 a += x.buttons.find((x) => x.id === interaction.customId).count;
             }
         });
 
-        const dataGlobalSlashCountToday = await GlobalButtonStats.find({ date: d });
+        const dataGlobalButtonCountToday = await GlobalButtonStats.find({ date: d });
 
         let e = 0;
 
-        dataGlobalSlashCountToday.forEach((x) => {
+        dataGlobalButtonCountToday.forEach((x) => {
             if (x.buttons.find((x) => x.id === interaction.customId)) {
                 e += x.buttons.find((x) => x.id === interaction.customId).count;
             }
@@ -254,21 +254,21 @@ module.exports = {
         if (interaction.guild) {
             // This Button's stats in this guild (total time)
 
-            const dataGuildSlashCount = await GuildButtonStats.find({ guildId: interaction.guild.id });
+            const dataGuildButtonCount = await GuildButtonStats.find({ guildId: interaction.guild.id });
 
             let b = 0;
 
-            dataGuildSlashCount.forEach((x) => {
+            dataGuildButtonCount.forEach((x) => {
                 if (x.buttons.find((x) => x.id === interaction.customId)) {
                     b += x.buttons.find((x) => x.id === interaction.customId).count;
                 }
             });
 
-            const dataGuildSlashCountTodaay = await GuildButtonStats.find({ guildId: interaction.guild.id, date: d });
+            const dataGuildButtonCountTodaay = await GuildButtonStats.find({ guildId: interaction.guild.id, date: d });
 
             let f = 0;
 
-            dataGuildSlashCountTodaay.forEach((x) => {
+            dataGuildButtonCountTodaay.forEach((x) => {
                 if (x.buttons.find((x) => x.id === interaction.customId)) {
                     f += x.buttons.find((x) => x.id === interaction.customId).count;
                 }
@@ -372,21 +372,21 @@ module.exports = {
         } else {
             // This button's stats in this DM (total time)
 
-            const dataDmSlashCount = await DmButtonStats.find({ dmChannelId: interaction.channel.id });
+            const dataDmButtonCount = await DmButtonStats.find({ dmChannelId: interaction.channel.id });
 
             let c = 0;
 
-            dataDmSlashCount.forEach((x) => {
+            dataDmButtonCount.forEach((x) => {
                 if (x.buttons.find((x) => x.id === interaction.customId)) {
                     c += x.buttons.find((x) => x.id === interaction.customId).count;
                 }
             });
 
-            const dataDmSlashCountToday = await DmButtonStats.find({ dmChannelId: interaction.channel.id });
+            const dataDmButtonCountToday = await DmButtonStats.find({ dmChannelId: interaction.channel.id });
 
             let g = 0;
 
-            dataDmSlashCountToday.forEach((x) => {
+            dataDmButtonCountToday.forEach((x) => {
                 if (x.buttons.find((x) => x.id === interaction.customId)) {
                     g += x.buttons.find((x) => x.id === interaction.customId).count;
                 }
