@@ -26,24 +26,19 @@
  * @since 1.0.0
  */
 
-// This module exports a configuration object for a Discord bot
-
 module.exports = {
-    webhookUrl: 'https://discord.com/api/webhooks/1093631900360388618/0XlIKWGMovfRYYhdc-LMAxXioDK_olh-rFqlj5M5W_aCvXjm7f5W5QEVW58eXKZDAh-y',
-    categoryId: '1091667141163503716',
+    id: 'string-select-test',
 
-    webhookName: 'temp',
+    async execute(interaction, client) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                interaction.channel.send({ content: 'Hi!' });
 
-    interactionsForumChannelId: '1091667376543629322',
-    guildsForumChannelId: '1091667196972912710',
-    otherForumChannelId: '1091667555145494579',
-
-    onGuildTagId: '1093920633957650554',
-    offGuildTagId: '1093920679738495047',
-
-    guildLogThreadId: '1091668606011592804',
-    slashThreadId: '1093631825794048100',
-    buttonThreadId: '1091668147800637521',
-    modalThreadId: '1091668426453434390',
-    selectThreadId: '1091668273009008673'
+                resolve(true);
+            } catch (error) {
+                client.out.error('&fError in &6' + __dirname + '&f/&9' + this.id + ' &fSelectMenuInteraction &c', error);
+                reject(error);
+            }
+        });
+    }
 };

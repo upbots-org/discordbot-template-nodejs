@@ -18,7 +18,7 @@
  */
 
 'use strict';
-const { ModalSubmitInteraction, Client } = require('discord.js');
+const { ModalSubmitInteraction, Client, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
 
 // https://www.w3schools.com/js/js_strict.asp
 
@@ -41,7 +41,18 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             try {
                 interaction.reply({
-                    content: 'This was a reply from select menu handler!'
+                    content: 'This was a reply from modal handler!',
+                    components: [
+                        new ActionRowBuilder().addComponents(
+                            new StringSelectMenuBuilder()
+                                .setCustomId('string-select-test')
+                                .setPlaceholder('Hi')
+                                .addOptions([
+                                    { label: 'HEY!', value: 'hey' },
+                                    { label: 'hi', value: 'hi' }
+                                ])
+                        )
+                    ]
                 });
                 resolve(true);
             } catch (error) {
