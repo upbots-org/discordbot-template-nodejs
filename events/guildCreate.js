@@ -210,8 +210,6 @@ module.exports = {
                     appliedTags: [`${client.configs.logs.onGuildTagId}`]
                 });
 
-                console.log(thread);
-
                 webhookGuilds.send({
                     embeds: [
                         new EmbedBuilder()
