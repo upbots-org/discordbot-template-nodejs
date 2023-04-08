@@ -71,19 +71,19 @@ module.exports = {
             });
 
             if (dataDmSlashStats) {
-                if (dataDmSlashStats.slashCommands.find((x) => x.id == interaction.commandId)) {
+                if (dataDmSlashStats.slashCommands.find((x) => x.id == interaction.commandName)) {
                     dataDmSlashStats.slashCommands.map((x) => {
-                        if (x.id == interaction.commandId) x.count += 1;
+                        if (x.id == interaction.commandName) x.count += 1;
                         return x;
                     });
                 } else {
-                    dataDmSlashStats.slashCommands.push({ id: interaction.commandId, count: 1 });
+                    dataDmSlashStats.slashCommands.push({ id: interaction.commandName, count: 1 });
                 }
 
                 await dataDmSlashStats.save();
             } else {
                 await DmSlashStats.create({
-                    slashCommands: [{ id: interaction.commandId, count: 1 }],
+                    slashCommands: [{ id: interaction.commandName, count: 1 }],
                     dmChannelId: interaction.channel.id,
                     userId: interaction.user.id,
                     date: d
@@ -101,19 +101,19 @@ module.exports = {
             });
 
             if (dataGroupDmSlashStats) {
-                if (dataGroupDmSlashStats.slashCommands.find((x) => x.id == interaction.commandId)) {
+                if (dataGroupDmSlashStats.slashCommands.find((x) => x.id == interaction.commandName)) {
                     dataGroupDmSlashStats.slashCommands.map((x) => {
-                        if (x.id == interaction.commandId) x.count += 1;
+                        if (x.id == interaction.commandName) x.count += 1;
                         return x;
                     });
                 } else {
-                    dataGroupDmSlashStats.slashCommands.push({ id: interaction.commandId, count: 1 });
+                    dataGroupDmSlashStats.slashCommands.push({ id: interaction.commandName, count: 1 });
                 }
 
                 await dataGroupDmSlashStats.save();
             } else {
                 await GroupDmSlashStats.create({
-                    slashCommands: [{ id: interaction.commandId, count: 1 }],
+                    slashCommands: [{ id: interaction.commandName, count: 1 }],
                     dmChannelId: interaction.channel.id,
                     userId: interaction.user.id,
                     date: d
@@ -132,19 +132,19 @@ module.exports = {
             });
 
             if (dataChannelSlashStats) {
-                if (dataChannelSlashStats.slashCommands.find((x) => x.id == interaction.commandId)) {
+                if (dataChannelSlashStats.slashCommands.find((x) => x.id == interaction.commandName)) {
                     dataChannelSlashStats.slashCommands.map((x) => {
-                        if (x.id == interaction.commandId) x.count += 1;
+                        if (x.id == interaction.commandName) x.count += 1;
                         return x;
                     });
                 } else {
-                    dataChannelSlashStats.slashCommands.push({ id: interaction.commandId, count: 1 });
+                    dataChannelSlashStats.slashCommands.push({ id: interaction.commandName, count: 1 });
                 }
 
                 await dataChannelSlashStats.save();
             } else {
                 await ChannelSlashStats.create({
-                    slashCommands: [{ id: interaction.commandId, count: 1 }],
+                    slashCommands: [{ id: interaction.commandName, count: 1 }],
                     channelId: interaction.channel.id,
                     guildId: interaction.guild.id,
                     userId: interaction.user.id,
@@ -163,19 +163,19 @@ module.exports = {
             });
 
             if (dataGuildSlashStats) {
-                if (dataGuildSlashStats.slashCommands.find((x) => x.id == interaction.commandId)) {
+                if (dataGuildSlashStats.slashCommands.find((x) => x.id == interaction.commandName)) {
                     dataGuildSlashStats.slashCommands.map((x) => {
-                        if (x.id == interaction.commandId) x.count += 1;
+                        if (x.id == interaction.commandName) x.count += 1;
                         return x;
                     });
                 } else {
-                    dataGuildSlashStats.slashCommands.push({ id: interaction.commandId, count: 1 });
+                    dataGuildSlashStats.slashCommands.push({ id: interaction.commandName, count: 1 });
                 }
 
                 await dataGuildSlashStats.save();
             } else {
                 await GuildSlashStats.create({
-                    slashCommands: [{ id: interaction.commandId, count: 1 }],
+                    slashCommands: [{ id: interaction.commandName, count: 1 }],
                     guildId: interaction.guild.id,
                     userId: interaction.user.id,
                     date: d
@@ -191,19 +191,19 @@ module.exports = {
         });
 
         if (dataGlobalSlashStats) {
-            if (dataGlobalSlashStats.slashCommands.find((x) => x.id == interaction.commandId)) {
+            if (dataGlobalSlashStats.slashCommands.find((x) => x.id == interaction.commandName)) {
                 dataGlobalSlashStats.slashCommands.map((x) => {
-                    if (x.id == interaction.commandId) x.count += 1;
+                    if (x.id == interaction.commandName) x.count += 1;
                     return x;
                 });
             } else {
-                dataGlobalSlashStats.slashCommands.push({ id: interaction.commandId, count: 1 });
+                dataGlobalSlashStats.slashCommands.push({ id: interaction.commandName, count: 1 });
             }
 
             await dataGlobalSlashStats.save();
         } else {
             await GlobalSlashStats.create({
-                slashCommands: [{ id: interaction.commandId, count: 1 }],
+                slashCommands: [{ id: interaction.commandName, count: 1 }],
                 userId: interaction.user.id,
                 date: d
             });
@@ -232,8 +232,8 @@ module.exports = {
         let a = 0;
 
         dataGlobalSlashCount.forEach((x) => {
-            if (x.slashCommands.find((x) => x.id === interaction.commandId)) {
-                a += x.slashCommands.find((x) => x.id === interaction.commandId).count;
+            if (x.slashCommands.find((x) => x.id === interaction.commandName)) {
+                a += x.slashCommands.find((x) => x.id === interaction.commandName).count;
             }
         });
 
@@ -242,8 +242,8 @@ module.exports = {
         let e = 0;
 
         dataGlobalSlashCountToday.forEach((x) => {
-            if (x.slashCommands.find((x) => x.id === interaction.commandId)) {
-                e += x.slashCommands.find((x) => x.id === interaction.commandId).count;
+            if (x.slashCommands.find((x) => x.id === interaction.commandName)) {
+                e += x.slashCommands.find((x) => x.id === interaction.commandName).count;
             }
         });
 
@@ -257,8 +257,8 @@ module.exports = {
             let b = 0;
 
             dataGuildSlashCount.forEach((x) => {
-                if (x.slashCommands.find((x) => x.id === interaction.commandId)) {
-                    b += x.slashCommands.find((x) => x.id === interaction.commandId).count;
+                if (x.slashCommands.find((x) => x.id === interaction.commandName)) {
+                    b += x.slashCommands.find((x) => x.id === interaction.commandName).count;
                 }
             });
 
@@ -267,8 +267,8 @@ module.exports = {
             let f = 0;
 
             dataGuildSlashCountTodaay.forEach((x) => {
-                if (x.slashCommands.find((x) => x.id === interaction.commandId)) {
-                    f += x.slashCommands.find((x) => x.id === interaction.commandId).count;
+                if (x.slashCommands.find((x) => x.id === interaction.commandName)) {
+                    f += x.slashCommands.find((x) => x.id === interaction.commandName).count;
                 }
             });
 
@@ -377,8 +377,8 @@ module.exports = {
             let c = 0;
 
             dataDmSlashCount.forEach((x) => {
-                if (x.slashCommands.find((x) => x.id === interaction.commandId)) {
-                    c += x.slashCommands.find((x) => x.id === interaction.commandId).count;
+                if (x.slashCommands.find((x) => x.id === interaction.commandName)) {
+                    c += x.slashCommands.find((x) => x.id === interaction.commandName).count;
                 }
             });
 
@@ -387,8 +387,8 @@ module.exports = {
             let g = 0;
 
             dataDmSlashCountToday.forEach((x) => {
-                if (x.slashCommands.find((x) => x.id === interaction.commandId)) {
-                    g += x.slashCommands.find((x) => x.id === interaction.commandId).count;
+                if (x.slashCommands.find((x) => x.id === interaction.commandName)) {
+                    g += x.slashCommands.find((x) => x.id === interaction.commandName).count;
                 }
             });
 
