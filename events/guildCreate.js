@@ -35,7 +35,8 @@ const {
     ActionRowBuilder,
     ButtonBuilder,
     StringSelectMenuBuilder,
-    ButtonStyle
+    ButtonStyle,
+    AttachmentBuilder
 } = require('discord.js');
 
 module.exports = {
@@ -203,10 +204,13 @@ module.exports = {
                                     iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
                                 })
                                 .setTimestamp()
-                        ]
+                        ],
+                        files: [new AttachmentBuilder(guild.iconURL(), { name: 'guildicon.png' })]
                     },
                     appliedTags: [`${client.configs.logs.onGuildTagId}`]
                 });
+
+                console.log(thread);
 
                 webhookGuilds.send({
                     embeds: [
