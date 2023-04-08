@@ -33,9 +33,9 @@ module.exports = {
     information: '#89d6c8', // Color used for informational messages.
     success: '#89d694', // Color used for messages indicating success.
 
-    autocomplete: '#8c94d6',
+    messagecontext: '#8c94d6',
+    usercontext: '#d68994',
     button: '#d69489',
-    context: '#d68994',
     modal: '#94d68c',
     command: '#89d6b7',
     select: '#d6b789',

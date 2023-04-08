@@ -17,11 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-'use strict'; // https://www.w3schools.com/js/js_strict.asp
+'use strict';
+const { AutocompleteInteraction, Client } = require('discord.js');
+
+// https://www.w3schools.com/js/js_strict.asp
 
 /**********************************************************************/
-
-const { SlashCommandBuilder, ChatInputCommandInteraction, Client } = require('discord.js');
 
 /**
  * @author LuciferMorningstarDev
@@ -29,26 +30,37 @@ const { SlashCommandBuilder, ChatInputCommandInteraction, Client } = require('di
  */
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('search')
-        .setDescription('Search something')
-        .addStringOption((option) =>
-            option.setName('query').setDescription('Phrase to search for').setRequired(true).setAutocomplete(true)
-        ),
+    name: 'search',
     /**
      *
-     * @param {ChatInputCommandInteraction} interaction
+     * @param {AutocompleteInteraction} interaction
      * @param {Client} client
      * @returns
      */
     async execute(interaction, client) {
         return new Promise(async (resolve, reject) => {
             try {
-                console.log(interaction.options.getString('query'));
+                const focusedOption = interaction.options.getFocused(true);
 
+                if (!focusedOption?.name) return resolve(true);
+
+                let choices;
+
+                if (focusedOption.name === 'query') {
+                    choices = [
+                        'Popular Topics: Threads',
+                        'Sharding: Getting started',
+                        'Library: Voice Connections',
+                        'Interactions: Replying to slash commands',
+                        'Popular Topics: Embed preview'
+                    ];
+                }
+
+                const filtered = choices.filter((choice) => choice.startsWith(focusedOption.value));
+                await interaction.respond(filtered.map((choice) => ({ name: choice, value: choice })));
                 resolve(true);
             } catch (error) {
-                client.out.error('&fError in &6' + __dirname + '&f/&9' + this.data.name + ' &fSlashCommand &c', error);
+                client.out.error('&fError in &6' + __dirname + '&f/&9' + this.id + ' &fAutocompleteInteraction &c', error);
                 reject(error);
             }
         });

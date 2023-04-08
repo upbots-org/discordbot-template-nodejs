@@ -130,6 +130,8 @@ for (const folder of modelFolders) {
 /**********************************************************************/
 client.translations = {};
 
+client.setMaxListeners(100);
+
 // Read all the directories within the "translations" folder and store them in the "languageFolders" array.
 const languageFolders = fs.readdirSync('./translations');
 for (const folder of languageFolders) {
