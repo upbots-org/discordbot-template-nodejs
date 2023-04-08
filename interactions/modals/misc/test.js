@@ -18,7 +18,14 @@
  */
 
 'use strict';
-const { ModalSubmitInteraction, Client, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
+const {
+    ModalSubmitInteraction,
+    Client,
+    ActionRowBuilder,
+    StringSelectMenuBuilder,
+    ChannelSelectMenuBuilder,
+    ChannelType
+} = require('discord.js');
 
 // https://www.w3schools.com/js/js_strict.asp
 
@@ -51,6 +58,12 @@ module.exports = {
                                     { label: 'HEY!', value: 'hey' },
                                     { label: 'hi', value: 'hi' }
                                 ])
+                        ),
+                        new ActionRowBuilder().addComponents(
+                            new ChannelSelectMenuBuilder()
+                                .setPlaceholder('CHANNELS!!')
+                                .setChannelTypes(ChannelType.GuildText)
+                                .setCustomId('channel-test-select')
                         )
                     ]
                 });

@@ -27,7 +27,7 @@
  */
 
 module.exports = {
-    id: 'string-select-test',
+    id: 'channel-test-select',
 
     async execute(interaction, client) {
         return new Promise(async (resolve, reject) => {
