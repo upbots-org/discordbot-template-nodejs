@@ -43,5 +43,6 @@ module.exports = {
 
     guildLogThreadId: '1091668606011592804',
     slashThreadId: '1093631825794048100',
-    buttonThreadId: '1091668147800637521'
+    buttonThreadId: '1091668147800637521',
+    modalThreadId: '1091668426453434390'
 };

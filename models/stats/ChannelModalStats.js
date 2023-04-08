@@ -17,10 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-'use strict';
-const { ModalSubmitInteraction, Client } = require('discord.js');
-
-// https://www.w3schools.com/js/js_strict.asp
+'use strict'; // https://www.w3schools.com/js/js_strict.asp
 
 /**********************************************************************/
 
@@ -29,25 +26,18 @@ const { ModalSubmitInteraction, Client } = require('discord.js');
  * @since 1.0.0
  */
 
-module.exports = {
-    id: 'sample',
-    /**
-     *
-     * @param {ModalSubmitInteraction} interaction
-     * @param {Client} client
-     * @returns
-     */
-    async execute(interaction, client) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                interaction.reply({
-                    content: 'This was a reply from select menu handler!'
-                });
-                resolve(true);
-            } catch (error) {
-                client.out.error('&fError in &6' + __dirname + '&f/&9' + this.id + ' &fModalInteraction &c', error);
-                reject(error);
-            }
-        });
-    }
-};
+const mongoose = require('mongoose');
+
+const { Schema, model } = mongoose;
+
+const ChannelModalStatsSchema = new Schema(
+    {
+        guildId: { type: String, required: true },
+        channelId: { type: String, required: true },
+        userId: { type: String, required: true },
+        modals: [{ id: { type: String, default: null, required: true }, count: { type: Number, default: 0, required: true } }],
+        date: { type: Date, required: true }
+    },
+    { timestamps: true, collection: 'channel_modal_stats' }
+);
+module.exports = mongoose.models.ChannelModalStats || model('ChannelModalStats', ChannelModalStatsSchema);

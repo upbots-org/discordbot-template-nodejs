@@ -18,7 +18,15 @@
  */
 
 'use strict';
-const { ButtonInteraction, Client } = require('discord.js');
+const {
+    ButtonInteraction,
+    Client,
+    ModalBuilder,
+    ActionRowBuilder,
+    ButtonBuilder,
+    TextInputBuilder,
+    TextInputStyle
+} = require('discord.js');
 
 // https://www.w3schools.com/js/js_strict.asp
 
@@ -42,7 +50,20 @@ module.exports = {
             try {
                 // Preparation for the autocomplete request.
 
-                interaction.channel.send({ content: 'hi' });
+                await interaction.showModal(
+                    new ModalBuilder()
+                        .setCustomId('test-modal')
+                        .setTitle('test modal')
+                        .addComponents(
+                            new ActionRowBuilder().addComponents(
+                                new TextInputBuilder()
+                                    .setCustomId('test-modal-input')
+                                    .setPlaceholder("That's a test!")
+                                    .setLabel('Test!')
+                                    .setStyle(TextInputStyle.Paragraph)
+                            )
+                        )
+                );
 
                 resolve(true);
             } catch (error) {
