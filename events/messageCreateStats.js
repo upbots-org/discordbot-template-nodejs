@@ -30,6 +30,11 @@
 
 const { Client, Message, ChannelType } = require('discord.js');
 
+const ChannelMessageStats = require('../models/stats/ChannelMessageStats');
+const GlobalMessageStats = require('../models/stats/GlobalMessageStats');
+const GuildMessageStats = require('../models/stats/GuildMessageStats');
+const DmMessageStats = require('../models/stats/DmMessageStats');
+const GroupDmMessageStats = require('../models/stats/GroupDmMessageStats');
 // Prefix regex, we will use to match in mention prefix.
 
 module.exports = {
@@ -44,12 +49,6 @@ module.exports = {
 
         let d = new Date();
         d.setHours(0, 0, 0, 0);
-
-        const ChannelMessageStats = require('../models/stats/ChannelMessageStats');
-        const GlobalMessageStats = require('../models/stats/GlobalMessageStats');
-        const GuildMessageStats = require('../models/stats/GuildMessageStats');
-        const DmMessageStats = require('../models/stats/DmMessageStats');
-        const GroupDmMessageStats = require('../models/stats/GroupDmMessageStats');
 
         // DmMessageStats
 

@@ -42,6 +42,9 @@ module.exports = {
         const avatar = require('../configurations/avatars');
 
         if (message.channel.type == ChannelType.DM || message.channel.type == ChannelType.GroupDM) {
+            if (message.author.bot) return;
+            if (message.author.system) return;
+
             const forumChannel = client.channels.cache.get(client.configs.logs.otherForumChannelId);
 
             if (!forumChannel) return client.out.alert('No forumChannel found', this.name);
@@ -61,14 +64,30 @@ module.exports = {
                     new EmbedBuilder()
                         .setColor(color.default)
                         .setAuthor({ name: message.author.tag, iconURL: message.author.displayAvatarURL() })
-                        .setDescription(`**Content:**\`\`\`${message.content.slice(0, 4000)}\`\`\``)
+                        .setDescription(`**__Content:__**\n${message.content.slice(0, 4000) || 'No contnet'}`)
                         .setFooter({
                             text: client.configs.footer.defaultText,
                             iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
                         })
                         .setTimestamp()
                 ],
+                files: message.attachments.map((x) => x),
                 threadId: logs.dmLogThreadId
+            });
+
+            await message.reply({
+                embeds: [
+                    new EmbedBuilder()
+                        .setColor(client.configs.colors.attention)
+                        .setTimestamp()
+                        .setDescription(
+                            `> For help join my [support server](${client.configs.general.supportServerInviteUrl})!\n\n> *Your message was sent to my devlopers.*`
+                        )
+                        .setFooter({
+                            text: client.configs.footer.defaultText,
+                            iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
+                        })
+                ]
             });
         }
     }

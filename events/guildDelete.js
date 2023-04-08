@@ -20,6 +20,12 @@
 'use strict';
 const { Guild, Client, WebhookClient, EmbedBuilder } = require('discord.js');
 
+const GuildSettings = require('../models/guilds/GuildSettings');
+
+const color = require('../configurations/colors');
+const logsConfig = require('../configurations/logs');
+const avatar = require('../configurations/avatars');
+
 // https://www.w3schools.com/js/js_strict.asp
 
 /**********************************************************************/
@@ -37,12 +43,6 @@ module.exports = {
      * @param {Client} client
      */
     async execute(guild, client) {
-        const GuildSettings = require('../models/guilds/GuildSettings');
-
-        const color = require('../configurations/colors');
-        const logsConfig = require('../configurations/logs');
-        const avatar = require('../configurations/avatars');
-
         let dataGuildSettings = null;
 
         dataGuildSettings = await GuildSettings.findOne({ id: guild.id });

@@ -20,6 +20,17 @@
 'use strict';
 const { Client, ChannelType, WebhookClient, EmbedBuilder } = require('discord.js');
 
+const ChannelSelectStats = require('../models/stats/ChannelSelectStats');
+const DmSelectStats = require('../models/stats/DmSelectStats');
+const GlobalSelectStats = require('../models/stats/GlobalSelectStats');
+const GuildSelectStats = require('../models/stats/GuildSelectStats');
+const GroupDmSelectStats = require('../models/stats/GroupDmSelectStats');
+
+const color = require('../configurations/colors');
+const logs = require('../configurations/logs');
+const avatar = require('../configurations/avatars');
+
+const GuildSettings = require('../models/guilds/GuildSettings');
 // https://www.w3schools.com/js/js_strict.asp
 
 /**********************************************************************/
@@ -43,20 +54,10 @@ module.exports = {
         if (!command) return;
         // If the interaction is not a command in cache.
 
-        const color = require('../configurations/colors');
-        const logs = require('../configurations/logs');
-        const avatar = require('../configurations/avatars');
-
         let d = new Date();
         d.setHours(0, 0, 0, 0);
 
         // A try to executes the interaction.
-
-        const ChannelSelectStats = require('../models/stats/ChannelSelectStats');
-        const DmSelectStats = require('../models/stats/DmSelectStats');
-        const GlobalSelectStats = require('../models/stats/GlobalSelectStats');
-        const GuildSelectStats = require('../models/stats/GuildSelectStats');
-        const GroupDmSelectStats = require('../models/stats/GroupDmSelectStats');
 
         if (interaction?.channel?.type == ChannelType.DM) {
             const dataDmSelectStats = await DmSelectStats.findOne({
@@ -268,8 +269,6 @@ module.exports = {
             });
 
             // Fetching GuildSettings
-
-            const GuildSettings = require('../models/guilds/GuildSettings');
 
             let dataGuildSettings = null;
 

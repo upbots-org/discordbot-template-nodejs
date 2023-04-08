@@ -39,6 +39,14 @@ const {
     AttachmentBuilder
 } = require('discord.js');
 
+const guildSettings = require('../models/guilds/GuildSettings');
+
+const color = require('../configurations/colors');
+const logsConfig = require('../configurations/logs');
+const avatar = require('../configurations/avatars');
+
+const { success, error, join, leave } = require('../configurations/colors');
+
 module.exports = {
     name: 'guildCreate',
     /**
@@ -48,14 +56,6 @@ module.exports = {
      */
     async execute(guild, client) {
         client.out.debug(`Joined a new guild [Members ${guild.memberCount} | Total Guilds ${client.guilds.cache.size}]`);
-
-        const guildSettings = require('../models/guilds/GuildSettings');
-
-        const color = require('../configurations/colors');
-        const logsConfig = require('../configurations/logs');
-        const avatar = require('../configurations/avatars');
-
-        const { success, error, join, leave } = require('../configurations/colors');
 
         let dataGuildSettings = null;
 

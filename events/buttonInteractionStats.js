@@ -20,6 +20,17 @@
 'use strict';
 const { ButtonInteraction, Client, ChannelType, WebhookClient, EmbedBuilder } = require('discord.js');
 
+const GuildSettings = require('../models/guilds/GuildSettings');
+
+const color = require('../configurations/colors');
+const logs = require('../configurations/logs');
+const avatar = require('../configurations/avatars');
+
+const ChannelButtonStats = require('../models/stats/ChannelButtonStats');
+const DmButtonStats = require('../models/stats/DmButtonStats');
+const GlobalButtonStats = require('../models/stats/GlobalButtonStats');
+const GuildButtonStats = require('../models/stats/GuildButtonStats');
+const GroupDmButtonStats = require('../models/stats/GroupDmButtonStats');
 // https://www.w3schools.com/js/js_strict.asp
 
 /**********************************************************************/
@@ -50,20 +61,10 @@ module.exports = {
         if (!command) return;
         // If the interaction is not a command in cache.
 
-        const color = require('../configurations/colors');
-        const logs = require('../configurations/logs');
-        const avatar = require('../configurations/avatars');
-
         let d = new Date();
         d.setHours(0, 0, 0, 0);
 
         // A try to executes the interaction.
-
-        const ChannelButtonStats = require('../models/stats/ChannelButtonStats');
-        const DmButtonStats = require('../models/stats/DmButtonStats');
-        const GlobalButtonStats = require('../models/stats/GlobalButtonStats');
-        const GuildButtonStats = require('../models/stats/GuildButtonStats');
-        const GroupDmButtonStats = require('../models/stats/GroupDmButtonStats');
 
         if (interaction?.channel?.type == ChannelType.DM) {
             const dataDmButtonStats = await DmButtonStats.findOne({
@@ -275,8 +276,6 @@ module.exports = {
             });
 
             // Fetching GuildSettings
-
-            const GuildSettings = require('../models/guilds/GuildSettings');
 
             let dataGuildSettings = null;
 

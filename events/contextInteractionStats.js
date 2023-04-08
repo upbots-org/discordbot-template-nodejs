@@ -20,6 +20,23 @@
 'use strict';
 const { ChannelType, EmbedBuilder, WebhookClient } = require('discord.js');
 
+const color = require('../configurations/colors');
+const logs = require('../configurations/logs');
+const avatar = require('../configurations/avatars');
+
+const ChannelMessageContextStats = require('../models/stats/ChannelMessageContextStats');
+const DmMessageContextStats = require('../models/stats/DmMessageContextStats');
+const GlobalMessageContextStats = require('../models/stats/GlobalMessageContextStats');
+const GuildMessageContextStats = require('../models/stats/GuildMessageContextStats');
+const GroupDmMessageContextStats = require('../models/stats/GroupDmMessageContextStats');
+
+const ChannelUserContextStats = require('../models/stats/ChannelUserContextStats');
+const DmUserContextStats = require('../models/stats/DmUserContextStats');
+const GlobalUserContextStats = require('../models/stats/GlobalUserContextStats');
+const GuildUserContextStats = require('../models/stats/GuildUserContextStats');
+const GroupDmUserContextStats = require('../models/stats/GroupDmUserContextStats');
+
+const GuildSettings = require('../models/guilds/GuildSettings');
 // https://www.w3schools.com/js/js_strict.asp
 
 /**********************************************************************/
@@ -48,20 +65,10 @@ module.exports = {
 
             if (!command) return;
 
-            const color = require('../configurations/colors');
-            const logs = require('../configurations/logs');
-            const avatar = require('../configurations/avatars');
-
             let d = new Date();
             d.setHours(0, 0, 0, 0);
 
             // A try to executes the interaction.
-
-            const ChannelUserContextStats = require('../models/stats/ChannelUserContextStats');
-            const DmUserContextStats = require('../models/stats/DmUserContextStats');
-            const GlobalUserContextStats = require('../models/stats/GlobalUserContextStats');
-            const GuildUserContextStats = require('../models/stats/GuildUserContextStats');
-            const GroupDmUserContextStats = require('../models/stats/GroupDmUserContextStats');
 
             if (interaction?.channel?.type == ChannelType.DM) {
                 const dataDmUserContextStats = await DmUserContextStats.findOne({
@@ -274,8 +281,6 @@ module.exports = {
 
                 // Fetching GuildSettings
 
-                const GuildSettings = require('../models/guilds/GuildSettings');
-
                 let dataGuildSettings = null;
 
                 dataGuildSettings = await GuildSettings.findOne({ id: interaction.guild.id });
@@ -441,20 +446,10 @@ module.exports = {
 
             if (!command) return;
 
-            const color = require('../configurations/colors');
-            const logs = require('../configurations/logs');
-            const avatar = require('../configurations/avatars');
-
             let d = new Date();
             d.setHours(0, 0, 0, 0);
 
             // A try to executes the interaction.
-
-            const ChannelMessageContextStats = require('../models/stats/ChannelMessageContextStats');
-            const DmMessageContextStats = require('../models/stats/DmMessageContextStats');
-            const GlobalMessageContextStats = require('../models/stats/GlobalMessageContextStats');
-            const GuildMessageContextStats = require('../models/stats/GuildMessageContextStats');
-            const GroupDmMessageContextStats = require('../models/stats/GroupDmMessageContextStats');
 
             if (interaction?.channel?.type == ChannelType.DM) {
                 const dataDmMessageContextStats = await DmMessageContextStats.findOne({
@@ -669,8 +664,6 @@ module.exports = {
                 });
 
                 // Fetching GuildSettings
-
-                const GuildSettings = require('../models/guilds/GuildSettings');
 
                 let dataGuildSettings = null;
 

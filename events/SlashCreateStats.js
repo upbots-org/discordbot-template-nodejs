@@ -20,6 +20,16 @@
 'use strict';
 const { ChatInputCommandInteraction, Client, ChannelType, WebhookClient, EmbedBuilder } = require('discord.js');
 
+const GuildSettings = require('../models/guilds/GuildSettings');
+const color = require('../configurations/colors');
+const logs = require('../configurations/logs');
+const avatar = require('../configurations/avatars');
+const ChannelSlashStats = require('../models/stats/ChannelSlashStats');
+const DmSlashStats = require('../models/stats/DmSlashStats');
+const GlobalSlashStats = require('../models/stats/GlobalSlashStats');
+const GuildSlashStats = require('../models/stats/GuildSlashStats');
+const GroupDmSlashStats = require('../models/stats/GroupDmSlashStats');
+
 // https://www.w3schools.com/js/js_strict.asp
 
 /**********************************************************************/
@@ -46,22 +56,12 @@ module.exports = {
 
         // If the interaction is not a command in cache.
 
-        const color = require('../configurations/colors');
-        const logs = require('../configurations/logs');
-        const avatar = require('../configurations/avatars');
-
         if (!command) return;
 
         let d = new Date();
         d.setHours(0, 0, 0, 0);
 
         // A try to executes the interaction.
-
-        const ChannelSlashStats = require('../models/stats/ChannelSlashStats');
-        const DmSlashStats = require('../models/stats/DmSlashStats');
-        const GlobalSlashStats = require('../models/stats/GlobalSlashStats');
-        const GuildSlashStats = require('../models/stats/GuildSlashStats');
-        const GroupDmSlashStats = require('../models/stats/GroupDmSlashStats');
 
         if (interaction?.channel?.type == ChannelType.DM) {
             const dataDmSlashStats = await DmSlashStats.findOne({
@@ -273,8 +273,6 @@ module.exports = {
             });
 
             // Fetching GuildSettings
-
-            const GuildSettings = require('../models/guilds/GuildSettings');
 
             let dataGuildSettings = null;
 

@@ -27,8 +27,8 @@
  */
 
 module.exports = {
-    join: 'https://cdn.discordapp.com/attachments/1091668606011592804/1093919968229339306/join.png',
-    leave: 'https://cdn.discordapp.com/attachments/1091668606011592804/1093919968518742147/leave.png',
+    join: 'https://cdn.discordapp.com/attachments/1091668606011592804/1094328803209269329/join.png',
+    leave: 'https://cdn.discordapp.com/attachments/1091668606011592804/1094328803616096297/leave.png',
 
     messagecontext: 'https://cdn.discordapp.com/attachments/1093631825794048100/1093976569829150750/1074155720498499644.png',
     usercontext: 'https://cdn.discordapp.com/attachments/1093631825794048100/1093976569829150750/1074155720498499644.png',
