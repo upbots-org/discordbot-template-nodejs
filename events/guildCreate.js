@@ -131,6 +131,23 @@ module.exports = {
 
         if (!forum) client.out.alert(`Forum can't be found!`, this.name);
 
+        let webhookGuilds = null;
+
+        const forumChannelGuilds = client.channels.cache.get(client.configs.logs.guildsForumChannelId);
+
+        if (!forumChannelGuilds) return client.out.alert('No forumChannelGuilds found', this.name);
+
+        const webhooksGuildss = await forumChannelGuilds.fetchWebhooks();
+
+        if (webhooksGuildss.find((x) => x.name == 'Join')) {
+            webhookGuilds = new WebhookClient({ url: webhooksGuildss.find((x) => x.name == 'Join').url });
+        } else {
+            webhookGuilds = await forumChannelGuilds.createWebhook({
+                name: 'Join',
+                avatar: avatar.join
+            });
+        }
+
         if (forum) {
             const category = client.channels.cache.get(client.configs.logs.categoryId);
 
@@ -147,7 +164,7 @@ module.exports = {
 
                 thread = x;
 
-                x.send({
+                webhookGuilds.send({
                     embeds: [
                         new EmbedBuilder()
                             .setColor(join)
@@ -157,7 +174,8 @@ module.exports = {
                                 iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
                             })
                             .setTimestamp()
-                    ]
+                    ],
+                    threadId: thread.id
                 });
 
                 thread.setAppliedTags([client.configs.logs.onGuildTagId]);
@@ -190,7 +208,7 @@ module.exports = {
                     appliedTags: [`${client.configs.logs.onGuildTagId}`]
                 });
 
-                thread.send({
+                webhookGuilds.send({
                     embeds: [
                         new EmbedBuilder()
                             .setColor(join)
@@ -200,7 +218,8 @@ module.exports = {
                                 iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
                             })
                             .setTimestamp()
-                    ]
+                    ],
+                    threadId: thread.id
                 });
             }
 
@@ -211,7 +230,7 @@ module.exports = {
 
         // LOG CHANNEL
 
-        const forumChannel = client.channels.cache.get(logsConfig.otherForumChannelId);
+        const forumChannel = client.channels.cache.get(client.configs.logs.otherForumChannelId);
 
         if (!forumChannel) return client.out.alert('No forumChannel found', this.name);
 
@@ -219,13 +238,11 @@ module.exports = {
 
         let webhook = null;
 
-        if (webhooks.find((x) => x.name == logsConfig.webhookName)) {
-            webhook = new WebhookClient({ url: webhooks.find((x) => x.name == logsConfig.webhookName).url });
+        if (webhooks.find((x) => x.name == 'Join')) {
+            webhook = new WebhookClient({ url: webhooks.find((x) => x.name == 'Join').url });
         } else {
-            webhook = await forumChannel.createWebhook({ name: logsConfig.webhookName, avatar: client.user.displayAvatarURL() });
+            webhook = await forumChannel.createWebhook({ name: 'Join', avatar: avatar.join });
         }
-
-        await webhook.edit({ name: 'Join', avatar: avatar.join });
 
         webhook
             .send({
@@ -253,7 +270,5 @@ module.exports = {
             .catch((err) => {
                 client.out.alert('Failed sending guildJoin Log into log channel', this.name);
             });
-
-        await webhook.edit({ name: logsConfig.webhookName, avatar: client.user.displayAvatarURL() });
     }
 };

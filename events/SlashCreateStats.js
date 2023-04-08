@@ -219,13 +219,11 @@ module.exports = {
 
         let webhook = null;
 
-        if (webhooks.find((x) => x.name == logs.webhookName)) {
-            webhook = new WebhookClient({ url: webhooks.find((x) => x.name == logs.webhookName).url });
+        if (webhooks.find((x) => x.name == 'SlashCommand')) {
+            webhook = new WebhookClient({ url: webhooks.find((x) => x.name == 'SlashCommand').url });
         } else {
-            webhook = await forumChannel.createWebhook({ name: logs.webhookName, avatar: client.user.displayAvatarURL() });
+            webhook = await forumChannel.createWebhook({ name: 'SlashCommand', avatar: avatar.slashcommand });
         }
-
-        await webhook.edit({ name: 'SlashCommand', avatar: avatar.slashcommand });
 
         // This command's stats in every guild (total time)
 
@@ -306,11 +304,11 @@ module.exports = {
                                     interaction.channel.createdTimestamp / 1000
                                 )}:R>]\n→ User: **${interaction.user.tag}** (||${interaction.user.id}||) [<t:${parseInt(
                                     interaction.user.createdTimestamp / 1000
-                                )}:R>]\n\n> __**Usage-data**__\n→ Command: </${interaction.commandName}:${interaction.commandId}> (||${
+                                )}:R>]\n\n> __**Usage-data** [Each user]__\n→ Command: </${interaction.commandName}:${
                                     interaction.commandId
-                                }||)\n→ Today [Guild / Global  / On this guild]: **${b} / ${a} (${parseInt(
-                                    (b / a) * 100
-                                )}%)**\n→ All-Time [Guild / Global / On this guild]: **${f} / ${e} (${parseInt((f / e) * 100)}%)**`
+                                }> (||${interaction.commandId}||)\n→ Today [Guild / Global  / On this guild]: **${f} / ${e} (${parseInt(
+                                    (f / e) * 100
+                                )}%)**\n→ All-Time [Guild / Global / On this guild]: **${b} / ${a} (${parseInt((b / a) * 100)}%)**`
                             )
                             .setTimestamp()
                     ],
@@ -328,13 +326,11 @@ module.exports = {
 
             const webhooksGuildss = await forumChannelGuilds.fetchWebhooks();
 
-            if (webhooksGuildss.find((x) => x.name == logs.webhookName)) {
-                webhookGuilds = new WebhookClient({ url: webhooksGuildss.find((x) => x.name == logs.webhookName).url });
+            if (webhooksGuildss.find((x) => x.name == 'SlashCommand')) {
+                webhookGuilds = new WebhookClient({ url: webhooksGuildss.find((x) => x.name == 'SlashCommand').url });
             } else {
-                webhookGuilds = await forumChannelGuilds.createWebhook({ name: logs.webhookName, avatar: client.user.displayAvatarURL() });
+                webhookGuilds = await forumChannelGuilds.createWebhook({ name: 'SlashCommand', avatar: avatar.slashcommand });
             }
-
-            await webhookGuilds.edit({ name: 'SlashCommand', avatar: avatar.slashcommand });
 
             if (webhookGuilds) {
                 webhookGuilds
@@ -355,11 +351,11 @@ module.exports = {
                                         interaction.channel.createdTimestamp / 1000
                                     )}:R>]\n→ User: **${interaction.user.tag}** (||${interaction.user.id}||) [<t:${parseInt(
                                         interaction.user.createdTimestamp / 1000
-                                    )}:R>]\n\n> __**Usage-data**__\n→ Command: </${interaction.commandName}:${interaction.commandId}> (||${
+                                    )}:R>]\n\n> __**Usage-data** [Each user]__\n→ Command: </${interaction.commandName}:${
                                         interaction.commandId
-                                    }||)\n→ Today [Guild / Global  / On this guild]: **${b} / ${a} (${parseInt(
-                                        (b / a) * 100
-                                    )}%)**\n→ All-Time [Guild / Global / On this guild]: **${f} / ${e} (${parseInt((f / e) * 100)}%)**`
+                                    }> (||${interaction.commandId}||)\n→ Today [Guild / Global  / On this guild]: **${f} / ${e} (${parseInt(
+                                        (f / e) * 100
+                                    )}%)**\n→ All-Time [Guild / Global / On this guild]: **${b} / ${a} (${parseInt((b / a) * 100)}%)**`
                                 )
                                 .setTimestamp()
                         ],
@@ -370,6 +366,8 @@ module.exports = {
 
                         client.out.error(err);
                     });
+
+                // await webhookGuilds.edit({ name: logs.webhookName, avatar: client.user.displayAvatarURL() });
             } else client.out.alert('No webhookGuilds', this.name);
         } else {
             // This command's stats in this DM (total time)
@@ -384,7 +382,7 @@ module.exports = {
                 }
             });
 
-            const dataDmSlashCountToday = await DmSlashStats.find({ dmChannelId: interaction.channel.id });
+            const dataDmSlashCountToday = await DmSlashStats.find({ dmChannelId: interaction.channel.id, date: d });
 
             let g = 0;
 
@@ -408,9 +406,9 @@ module.exports = {
                                     interaction.channel.createdTimestamp / 1000
                                 )}:R>]\n→ User: **${interaction.user.tag}** (||${interaction.user.id}||) [<t:${parseInt(
                                     interaction.user.createdTimestamp / 1000
-                                )}:R>]\n\n> __**Usage-data**__\n→ Command: </${interaction.commandName}:${interaction.commandId}> (||${
+                                )}:R>]\n\n> __**Usage-data** [Each user]__\n→ Command: </${interaction.commandName}:${
                                     interaction.commandId
-                                }||)\n→ Today [This DM / Global  / On this DM]: **${g} / ${e} (${parseInt(
+                                }> (||${interaction.commandId}||)\n→ Today [This DM / Global  / On this DM]: **${g} / ${e} (${parseInt(
                                     (g / e) * 100
                                 )}%)**\n→ All-Time [This DM / Global / On this DM]: **${c} / ${a} (${parseInt((c / a) * 100)}%)**`
                             )
@@ -425,7 +423,6 @@ module.exports = {
                 });
         }
 
-        await webhook.edit({ name: logs.webhookName, avatar: client.user.displayAvatarURL() });
-        await webhookGuilds.edit({ name: logs.webhookName, avatar: client.user.displayAvatarURL() });
+        // await webhook.edit({ name: logs.webhookName, avatar: client.user.displayAvatarURL() });
     }
 };

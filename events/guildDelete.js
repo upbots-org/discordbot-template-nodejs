@@ -53,6 +53,7 @@ module.exports = {
         const forum = client.channels.cache.get(client.configs.logs.guildsForumChannelId);
 
         let thread = null;
+        let webhookGuilds = null;
 
         if (forum) {
             if (forum.threads.cache.find((x) => x.id === dataGuildSettings.threadId)) {
@@ -60,7 +61,22 @@ module.exports = {
 
                 thread.setAppliedTags([client.configs.logs.offGuildTagId]);
 
-                thread.send({
+                const forumChannelGuilds = client.channels.cache.get(client.configs.logs.guildsForumChannelId);
+
+                if (!forumChannelGuilds) return client.out.alert('No forumChannelGuilds found', this.name);
+
+                const webhooksGuildss = await forumChannelGuilds.fetchWebhooks();
+
+                if (webhooksGuildss.find((x) => x.name == 'Leave')) {
+                    webhookGuilds = new WebhookClient({ url: webhooksGuildss.find((x) => x.name == 'Leave').url });
+                } else {
+                    webhookGuilds = await forumChannelGuilds.createWebhook({
+                        name: 'Leave',
+                        avatar: avatar.leave
+                    });
+                }
+
+                webhookGuilds.send({
                     embeds: [
                         new EmbedBuilder()
                             .setColor(client.configs.colors.leave)
@@ -70,13 +86,15 @@ module.exports = {
                                 iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
                             })
                             .setTimestamp()
-                    ]
+                    ],
+                    threadId: thread.id
                 });
             }
         }
 
         // Send LeaveLog in other logs
-        const forumChannel = client.channels.cache.get(logsConfig.otherForumChannelId);
+
+        const forumChannel = client.channels.cache.get(client.configs.logs.otherForumChannelId);
 
         if (!forumChannel) return client.out.alert('No forumChannel found', this.name);
 
@@ -84,13 +102,11 @@ module.exports = {
 
         let webhook = null;
 
-        if (webhooks.find((x) => x.name == logsConfig.webhookName)) {
-            webhook = new WebhookClient({ url: webhooks.find((x) => x.name == logsConfig.webhookName).url });
+        if (webhooks.find((x) => x.name == 'Leave')) {
+            webhook = new WebhookClient({ url: webhooks.find((x) => x.name == 'Leave').url });
         } else {
-            webhook = await forumChannel.createWebhook({ name: logsConfig.webhookName, avatar: client.user.displayAvatarURL() });
+            webhook = await forumChannel.createWebhook({ name: 'Leave', avatar: avatar.leave });
         }
-
-        await webhook.edit({ name: 'Leave', avatar: avatar.leave });
 
         webhook.send({
             embeds: [
@@ -110,9 +126,5 @@ module.exports = {
         // Deleting Data
 
         await GuildSettings.findOneAndDelete({ id: guild.id });
-
-        //
-
-        await webhook.edit({ name: logsConfig.webhookName, avatar: client.user.displayAvatarURL() });
     }
 };
