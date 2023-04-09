@@ -47,6 +47,8 @@ const avatar = require('../configurations/avatars');
 
 const { success, error, join, leave } = require('../configurations/colors');
 
+const guildCountStats = require('../models/stats/GuildCountStats');
+
 module.exports = {
     name: 'guildCreate',
     /**
@@ -55,7 +57,7 @@ module.exports = {
      * @param {Client} client
      */
     async execute(guild, client) {
-        client.out.debug(`Joined a new guild [Members ${guild.memberCount} | Total Guilds ${client.guilds.cache.size}]`);
+        client.out.log(`Joined a new guild [Members ${guild.memberCount} | Total Guilds ${client.guilds.cache.size}]`);
 
         let dataGuildSettings = null;
 
@@ -169,7 +171,12 @@ module.exports = {
                     embeds: [
                         new EmbedBuilder()
                             .setColor(join)
-                            .setDescription(`> Joined again **${guild.name}**`)
+                            .setDescription(
+                                `> Joined again **${guild.name}** (||${guild.id}||) [${guild.memberCount} - <t:${parseInt(
+                                    guild.createdTimestamp
+                                )}:R>]`
+                            )
+                            .addFields({ name: 'Total Guilds', value: `${client.guilds.cache.size}`, inline: true })
                             .setFooter({
                                 text: client.configs.footer.defaultText,
                                 iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
@@ -199,6 +206,7 @@ module.exports = {
                                         .toArray()
                                         .join(` `)}\`\`\``
                                 )
+                                .addFields({ name: 'Total Guilds', value: `${client.guilds.cache.size}`, inline: true })
                                 .setFooter({
                                     text: client.configs.footer.defaultText,
                                     iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
@@ -214,7 +222,13 @@ module.exports = {
                     embeds: [
                         new EmbedBuilder()
                             .setColor(join)
-                            .setDescription(`> Joined **${guild.name}**`)
+                            .setDescription(
+                                `> Joined again **${guild.name}** (||${guild.id}||) [${guild.memberCount} - <t:${parseInt(
+                                    guild.createdTimestamp
+                                )}:R>]`
+                            )
+                            .addFields({ name: 'Total Guilds', value: `${client.guilds.cache.size}`, inline: true })
+
                             .setFooter({
                                 text: client.configs.footer.defaultText,
                                 iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
@@ -261,6 +275,7 @@ module.exports = {
                                 logs?.executor?.id || 'unknow'
                             }||)\n→ Permissions: \`\`\`${guild.members.me.permissions.toArray().join(` `)}\`\`\``
                         )
+                        .addFields({ name: 'Total Guilds', value: `${client.guilds.cache.size}`, inline: true })
                         .setFooter({
                             text: client.configs.footer.defaultText,
                             iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
@@ -272,5 +287,26 @@ module.exports = {
             .catch((err) => {
                 client.out.alert('Failed sending guildJoin Log into log channel', this.name);
             });
+
+        // STATS
+        let d = new Date();
+        d.setHours(0, 0, 0, 0);
+
+        let dataGuildCountStats = null;
+
+        dataGuildCountStats = await guildCountStats.findOne({ date: d });
+
+        if (!dataGuildCountStats) {
+            dataGuildCountStats = await guildCountStats.create({
+                date: d,
+                joined: [{ name: guild.name, id: guild.id, timestamp: Date.now() }],
+                left: []
+            });
+        } else {
+            await guildCountStats.findOneAndUpdate(
+                { date: d },
+                { $push: { joined: { name: guild.name, id: guild.id, timestamp: Date.now() } } }
+            );
+        }
     }
 };

@@ -22,6 +22,8 @@ const { Guild, Client, WebhookClient, EmbedBuilder } = require('discord.js');
 
 const GuildSettings = require('../models/guilds/GuildSettings');
 
+const guildCountStats = require('../models/stats/GuildCountStats');
+
 const color = require('../configurations/colors');
 const logsConfig = require('../configurations/logs');
 const avatar = require('../configurations/avatars');
@@ -43,6 +45,8 @@ module.exports = {
      * @param {Client} client
      */
     async execute(guild, client) {
+        client.out.warn(`Left a guild [Members ${guild.memberCount} | Total Guilds ${client.guilds.cache.size}]`);
+
         let dataGuildSettings = null;
 
         dataGuildSettings = await GuildSettings.findOne({ id: guild.id });
@@ -51,6 +55,14 @@ module.exports = {
         // Send LeaveLog in guildpost
 
         const forum = client.channels.cache.get(client.configs.logs.guildsForumChannelId);
+
+        const category = client.channels.cache.get(client.configs.logs.categoryId);
+
+        if (category) {
+            category.edit({ name: `${client.user.username} [Bot - ${client.guilds.cache.size} Guilds]` });
+        } else {
+            client.out.alert(`Category can't be found!`, this.name);
+        }
 
         let thread = null;
         let webhookGuilds = null;
@@ -80,7 +92,12 @@ module.exports = {
                     embeds: [
                         new EmbedBuilder()
                             .setColor(client.configs.colors.leave)
-                            .setDescription(`> Left **${guild.name}**`)
+                            .setDescription(
+                                `> Left **${guild.name}** (||${guild.id}||) [${guild.memberCount} - <t:${parseInt(
+                                    guild.createdTimestamp / 1000
+                                )}:R>]`
+                            )
+                            .addFields({ name: 'Total Guilds', value: `${client.guilds.cache.size}`, inline: true })
                             .setFooter({
                                 text: client.configs.footer.defaultText,
                                 iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
@@ -112,7 +129,12 @@ module.exports = {
             embeds: [
                 new EmbedBuilder()
                     .setColor(client.configs.colors.leave)
-                    .setDescription(`> Left **${guild.name}** (||${guild.id}||)`)
+                    .setDescription(
+                        `> Left **${guild.name}** (||${guild.id}||) [${guild.memberCount} - <t:${parseInt(
+                            guild.createdTimestamp / 1000
+                        )}:R>]`
+                    )
+                    .addFields({ name: 'Total Guilds', value: `${client.guilds.cache.size}`, inline: true })
                     .setThumbnail(guild.iconURL())
                     .setFooter({
                         text: client.configs.footer.defaultText,
@@ -126,5 +148,27 @@ module.exports = {
         // Deleting Data
 
         await GuildSettings.findOneAndDelete({ id: guild.id });
+
+        // UPDATE STATS
+
+        let d = new Date();
+        d.setHours(0, 0, 0, 0);
+
+        let dataGuildCountStats = null;
+
+        dataGuildCountStats = await guildCountStats.findOne({ date: d });
+
+        if (!dataGuildCountStats) {
+            dataGuildCountStats = await guildCountStats.create({
+                date: d,
+                joined: [],
+                left: [{ name: guild.name, id: guild.id, timestamp: Date.now() }]
+            });
+        } else {
+            await guildCountStats.findOneAndUpdate(
+                { date: d },
+                { $push: { left: { name: guild.name, id: guild.id, timestamp: Date.now() } } }
+            );
+        }
     }
 };
