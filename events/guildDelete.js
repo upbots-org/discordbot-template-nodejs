@@ -162,12 +162,12 @@ module.exports = {
             dataGuildCountStats = await guildCountStats.create({
                 date: d,
                 joined: [],
-                left: [{ name: guild.name, id: guild.id, timestamp: Date.now() }]
+                left: [{ name: guild.name, id: guild.id, timestamp: Date.now(), membercount: guild.memberCount }]
             });
         } else {
             await guildCountStats.findOneAndUpdate(
                 { date: d },
-                { $push: { left: { name: guild.name, id: guild.id, timestamp: Date.now() } } }
+                { $push: { left: { name: guild.name, id: guild.id, timestamp: Date.now(), membercount: guild.memberCount } } }
             );
         }
     }

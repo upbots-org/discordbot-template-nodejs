@@ -21,36 +21,21 @@
 
 /**********************************************************************/
 
-const { SlashCommandBuilder, ChatInputCommandInteraction, Client } = require('discord.js');
-
 /**
  * @author LuciferMorningstarDev
  * @since 1.0.0
  */
+module.exports = class Default {
+    constructor(client) {
+        this.client = client;
+        Object.freeze(this);
+    }
 
-module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('search')
-        .setDescription('Search something')
-        .addStringOption((option) =>
-            option.setName('query').setDescription('Phrase to search for').setRequired(true).setAutocomplete(true)
-        ),
-    /**
-     *
-     * @param {ChatInputCommandInteraction} interaction
-     * @param {Client} client
-     * @returns
-     */
-    async execute(interaction, client) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                console.log(interaction.options.getString('query'));
+    get no_guild_settings_description() {
+        return '> {icon.error} I could not find any data about this server...\n\n> Please invite me again!';
+    }
 
-                resolve(true);
-            } catch (error) {
-                client.out.error('&fError in &6' + __dirname + '&f/&9' + this.data.name + ' &fSlashCommand &c', error);
-                reject(error);
-            }
-        });
+    get no_guild_settings_button_label() {
+        return 'Support Server';
     }
 };

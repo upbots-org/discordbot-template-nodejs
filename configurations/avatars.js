@@ -38,5 +38,6 @@ module.exports = {
     select: 'https://cdn.discordapp.com/attachments/1093631825794048100/1093976569829150750/1074155720498499644.png',
     slashcommand: 'https://cdn.discordapp.com/attachments/1093631825794048100/1093976569829150750/1074155720498499644.png',
     trigger: 'https://cdn.discordapp.com/attachments/1093631825794048100/1093976569829150750/1074155720498499644.png',
-    dm: 'https://cdn.discordapp.com/attachments/1091667913754280056/1094327594104660048/869507189797158953.png'
+    dm: 'https://cdn.discordapp.com/attachments/1091667913754280056/1094327594104660048/869507189797158953.png',
+    stats: 'https://cdn.discordapp.com/attachments/867345989216108564/1094619767098327060/emoji.png'
 };

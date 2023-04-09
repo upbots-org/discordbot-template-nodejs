@@ -17,7 +17,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-'use strict'; // https://www.w3schools.com/js/js_strict.asp
+'use strict';
+
+// require packages
+
+const {
+    ContextMenuCommandBuilder,
+    MessageContextMenuCommandInteraction,
+    Client,
+    ButtonBuilder,
+    EmbedBuilder,
+    ButtonStyle,
+    ActionRowBuilder,
+    ApplicationCommandType
+} = require('discord.js');
+
+// require configs
+
+const color = require('../../../configurations/colors');
+const icon = require('../../../configurations/icons');
+const general = require('../../../configurations/general');
+
+// require models
+
+const guildSettings = require('../../../models/guilds/GuildSettings');
+
+// https://www.w3schools.com/js/js_strict.asp
 
 /**********************************************************************/
 
@@ -27,17 +52,58 @@
  */
 
 module.exports = {
-    data: {
-        id: 'sample',
-        type: 3 // 3 is for message context menus
-    },
-
+    data: new ContextMenuCommandBuilder().setName('sample').setType(ApplicationCommandType.Message),
+    /**
+     *
+     * @param {MessageContextMenuCommandInteraction} interaction
+     * @param {Client} client
+     * @returns
+     */
     async execute(interaction, client) {
         return new Promise(async (resolve, reject) => {
             try {
-                interaction.reply({
-                    content: 'I am a sample message context menu.'
-                });
+                // defering interaction
+
+                await interaction.deferReply({ ephemeral: true });
+
+                // default embed
+
+                const embed = new EmbedBuilder()
+                    .setFooter({
+                        text: client.configs.footer.defaultText,
+                        iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
+                    })
+                    .setTimestamp();
+
+                // check guildsettings
+
+                const dataGuildSettings = await guildSettings.findOne({ id: interaction.guild.id });
+                if (!dataGuildSettings) {
+                    return interaction.editReply({
+                        embeds: [
+                            embed
+                                .setColor(color.error)
+                                .setDescription(
+                                    `${client.translations[client.configs.general.defaultLanguage].default.no_guild_settings_description}`
+                                )
+                        ],
+                        components: [
+                            new ActionRowBuilder().addComponents(
+                                new ButtonBuilder()
+                                    .setURL(general.supportServerInviteUrl)
+                                    .setLabel(
+                                        client.translations[client.configs.general.defaultLanguage].default.no_guild_settings_button_label
+                                    )
+                                    .setStyle(ButtonStyle.Link)
+                            )
+                        ]
+                    });
+                }
+
+                const translate = client.translations[dataGuildSettings.language];
+
+                // start coding
+
                 resolve(true);
             } catch (error) {
                 client.out.error('&fError in &6' + __dirname + '&f/&9' + this.data.id + ' &fMESSAGE ContextInteraction &c', error);

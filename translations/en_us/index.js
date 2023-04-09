@@ -22,6 +22,7 @@
 /**********************************************************************/
 
 const Logging = require('./Logging');
+const Default = require('./Default');
 
 /**
  * @author LuciferMorningstarDev
@@ -29,6 +30,7 @@ const Logging = require('./Logging');
  */
 module.exports = (client) => {
     return {
-        logging: new Logging(client)
+        logging: new Logging(client),
+        default: new Default(client)
     };
 };

@@ -17,10 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-'use strict';
-const { ContextMenuCommandBuilder, ApplicationCommandType } = require('discord.js');
-
-// https://www.w3schools.com/js/js_strict.asp
+'use strict'; // https://www.w3schools.com/js/js_strict.asp
 
 /**********************************************************************/
 
@@ -28,20 +25,17 @@ const { ContextMenuCommandBuilder, ApplicationCommandType } = require('discord.j
  * @author LuciferMorningstarDev
  * @since 1.0.0
  */
+module.exports = class Default {
+    constructor(client) {
+        this.client = client;
+        Object.freeze(this);
+    }
 
-module.exports = {
-    data: new ContextMenuCommandBuilder().setName('Hi').setType(ApplicationCommandType.User),
-    async execute(interaction, client) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                interaction.reply({
-                    content: 'I am a sample user context menu.'
-                });
-                resolve(true);
-            } catch (error) {
-                client.out.error('&fError in &6' + __dirname + '&f/&9' + this.data.id + ' &fMESSAGE ContextInteraction &c', error);
-                reject(error);
-            }
-        });
+    get no_guild_settings_description() {
+        return '> {icon.error} Ich konnte keine Daten zu diesem Server finden...\n\n> Bitte lade mich erneut ein!';
+    }
+
+    get no_guild_settings_button_label() {
+        return 'Support Server';
     }
 };

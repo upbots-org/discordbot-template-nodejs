@@ -29,7 +29,7 @@
 // This module exports a configuration object for a Discord bot
 
 module.exports = {
-    default: '⚙️',
-    success: '✅',
-    error: '❌'
+    default: '`⚙️`',
+    success: '`✅`',
+    error: '`❌`'
 };

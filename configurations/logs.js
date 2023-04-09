@@ -50,5 +50,6 @@ module.exports = {
     messagecontextThreadId: '1091668196156776448',
     usercontextThreadId: '1094323150721925241',
     commandThreadId: '1091668104372830288',
-    triggerThreadId: '1094552285541040168'
+    triggerThreadId: '1094552285541040168',
+    statsThreadId: '1091667759215149166'
 };

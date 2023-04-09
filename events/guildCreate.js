@@ -173,7 +173,7 @@ module.exports = {
                             .setColor(join)
                             .setDescription(
                                 `> Joined again **${guild.name}** (||${guild.id}||) [${guild.memberCount} - <t:${parseInt(
-                                    guild.createdTimestamp
+                                    guild.createdTimestamp / 1000
                                 )}:R>]`
                             )
                             .addFields({ name: 'Total Guilds', value: `${client.guilds.cache.size}`, inline: true })
@@ -224,7 +224,7 @@ module.exports = {
                             .setColor(join)
                             .setDescription(
                                 `> Joined again **${guild.name}** (||${guild.id}||) [${guild.memberCount} - <t:${parseInt(
-                                    guild.createdTimestamp
+                                    guild.createdTimestamp / 1000
                                 )}:R>]`
                             )
                             .addFields({ name: 'Total Guilds', value: `${client.guilds.cache.size}`, inline: true })
@@ -299,13 +299,13 @@ module.exports = {
         if (!dataGuildCountStats) {
             dataGuildCountStats = await guildCountStats.create({
                 date: d,
-                joined: [{ name: guild.name, id: guild.id, timestamp: Date.now() }],
+                joined: [{ name: guild.name, id: guild.id, timestamp: Date.now(), membercount: guild.memberCount }],
                 left: []
             });
         } else {
             await guildCountStats.findOneAndUpdate(
                 { date: d },
-                { $push: { joined: { name: guild.name, id: guild.id, timestamp: Date.now() } } }
+                { $push: { joined: { name: guild.name, id: guild.id, timestamp: Date.now(), membercount: guild.memberCount } } }
             );
         }
     }

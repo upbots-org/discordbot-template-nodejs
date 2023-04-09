@@ -36,6 +36,7 @@ const GuildCountStatsSchema = new Schema(
             type: Object,
             name: { type: String, default: null },
             id: { type: String, default: null },
+            membercount: { type: Number, default: null },
             timestamp: { type: String, default: null },
             default: null
         },
@@ -43,6 +44,7 @@ const GuildCountStatsSchema = new Schema(
             type: Object,
             name: { type: String, default: null },
             id: { type: String, default: null },
+            membercount: { type: Number, default: null },
             timestamp: { type: String, default: null },
             default: null
         },

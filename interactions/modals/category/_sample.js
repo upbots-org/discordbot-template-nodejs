@@ -18,7 +18,20 @@
  */
 
 'use strict';
-const { ModalSubmitInteraction, Client } = require('discord.js');
+
+// require packages
+
+const { ModalSubmitInteraction, Client, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+
+// require configs
+
+const color = require('../../../configurations/colors');
+const icon = require('../../../configurations/icons');
+const general = require('../../../configurations/general');
+
+// require models
+
+const guildSettings = require('../../../models/guilds/GuildSettings');
 
 // https://www.w3schools.com/js/js_strict.asp
 
@@ -40,12 +53,51 @@ module.exports = {
     async execute(interaction, client) {
         return new Promise(async (resolve, reject) => {
             try {
-                interaction.reply({
-                    content: 'This was a reply from select menu handler!'
-                });
+                // defering interaction
+
+                await interaction.deferReply({ ephemeral: true });
+
+                // default embed
+
+                const embed = new EmbedBuilder()
+                    .setFooter({
+                        text: client.configs.footer.defaultText,
+                        iconURL: client.configs.footer.displayIcon ? client.configs.footer.defaultIcon : null
+                    })
+                    .setTimestamp();
+
+                // check guildsettings
+
+                const dataGuildSettings = await guildSettings.findOne({ id: interaction.guild.id });
+                if (!dataGuildSettings) {
+                    return interaction.editReply({
+                        embeds: [
+                            embed
+                                .setColor(color.error)
+                                .setDescription(
+                                    `${client.translations[client.configs.general.defaultLanguage].default.no_guild_settings_description}`
+                                )
+                        ],
+                        components: [
+                            new ActionRowBuilder().addComponents(
+                                new ButtonBuilder()
+                                    .setURL(general.supportServerInviteUrl)
+                                    .setLabel(
+                                        client.translations[client.configs.general.defaultLanguage].default.no_guild_settings_button_label
+                                    )
+                                    .setStyle(ButtonStyle.Link)
+                            )
+                        ]
+                    });
+                }
+
+                const translate = client.translations[dataGuildSettings.language];
+
+                // start coding
+
                 resolve(true);
             } catch (error) {
-                client.out.error('&fError in &6' + __dirname + '&f/&9' + this.id + ' &fModalInteraction &c', error);
+                client.out.error('&fError in &6' + __dirname + '&f/&9' + this.id + ' &fButtonInteraction &c', error);
                 reject(error);
             }
         });
