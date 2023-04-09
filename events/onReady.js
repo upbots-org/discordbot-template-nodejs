@@ -39,5 +39,11 @@ module.exports = {
 
         client.tools.discord.updateStatus(client);
         client.out.debug(client.translations[client.configs.general.defaultLanguage].logging.bot_ready.replace(/{tag}/g, client.user.tag));
+
+        setInterval(() => {
+            client.voiceTimes.forEach((value, key) => {
+                client.voiceTimes.set(key, value + 1000);
+            });
+        }, 1000);
     }
 };

@@ -42,11 +42,7 @@ module.exports = {
      * @param {Client} client
      */
     async execute(oldState, newState, client) {
-        const guildMember = newState.guild.members.cache.get(newState.member.user.id);
-
         if (oldState?.channel && !newState?.channel) {
-            clearInterval(guildMember.voiceTimer);
-
             let d = new Date();
             d.setHours(0, 0, 0, 0);
 
@@ -65,7 +61,7 @@ module.exports = {
                 });
 
                 if (dataChannelVoiceStats) {
-                    dataChannelVoiceStats.time += guildMember.voiceTime;
+                    dataChannelVoiceStats.time += client.voiceTimes.get(oldState.member.id) || 0;
 
                     dataChannelVoiceStats.save();
                 } else {
@@ -73,7 +69,7 @@ module.exports = {
                         guildId: oldState.guild.id,
                         channelId: oldState.channel.id,
                         userId: oldState.member.id,
-                        time: guildMember.voiceTime,
+                        time: client.voiceTimes.get(oldState.member.id) || 0,
                         date: d
                     });
                 }
@@ -89,13 +85,13 @@ module.exports = {
             });
 
             if (dataGlobalVoiceStats) {
-                dataGlobalVoiceStats.time += guildMember.voiceTime;
+                dataGlobalVoiceStats.time += client.voiceTimes.get(oldState.member.id) || 0;
 
                 dataGlobalVoiceStats.save();
             } else {
                 dataGlobalVoiceStats = await GlobalVoiceStats.create({
                     userId: oldState.member.id,
-                    time: guildMember.voiceTime,
+                    time: client.voiceTimes.get(oldState.member.id) || 0,
                     date: d
                 });
             }
@@ -112,25 +108,22 @@ module.exports = {
                 });
 
                 if (dataGuildVoiceStats) {
-                    dataGuildVoiceStats.time += guildMember.voiceTime;
+                    dataGuildVoiceStats.time += client.voiceTimes.get(oldState.member.id) || 0;
 
                     dataGuildVoiceStats.save();
                 } else {
                     dataGuildVoiceStats = await GuildVoiceStats.create({
                         guildId: oldState.guild.id,
                         userId: oldState.member.id,
-                        time: guildMember.voiceTime,
+                        time: client.voiceTimes.get(oldState.member.id) || 0,
                         date: d
                     });
                 }
             }
 
-            guildMember.voiceTimer = null;
+            client.voiceTimes.delete(oldState.member.id);
         } else if (!oldState.channel && newState.channel) {
-            guildMember.voiceTime = 0;
-            guildMember.voiceTimer = setInterval(() => {
-                guildMember.voiceTime += 3000;
-            }, 3000);
+            client.voiceTimes.set(newState.member.id, 0);
         }
     }
 };

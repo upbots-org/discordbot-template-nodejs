@@ -96,6 +96,10 @@ client.autocompleteInteractions = new Collection();
 // cooldowns
 client.cooldowns = new Collection();
 
+// voicetime
+
+client.voiceTimes = new Collection();
+
 /**********************************************************************/
 client.configs = {};
 const configFiles = fs.readdirSync('./configurations');
