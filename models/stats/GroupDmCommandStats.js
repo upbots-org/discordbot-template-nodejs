@@ -26,28 +26,18 @@
  * @since 1.0.0
  */
 
-// This module exports a configuration object for a Discord bot
+const mongoose = require('mongoose');
 
-module.exports = {
-    webhookUrl: 'https://discord.com/api/webhooks/1093631900360388618/0XlIKWGMovfRYYhdc-LMAxXioDK_olh-rFqlj5M5W_aCvXjm7f5W5QEVW58eXKZDAh-y',
-    categoryId: '1091667141163503716',
+const { Schema, model } = mongoose;
 
-    webhookName: 'temp',
+const GroupDmCommandStatsSchema = new Schema(
+    {
+        groupDmChannelId: { type: String, required: true },
+        userId: { type: String, required: true },
+        commands: [{ id: { type: String, default: null, required: true }, count: { type: Number, default: 0, required: true } }],
+        date: { type: Date, required: true }
+    },
+    { timestamps: true, collection: 'groupdm_command_stats' }
+);
 
-    interactionsForumChannelId: '1091667376543629322',
-    guildsForumChannelId: '1091667196972912710',
-    otherForumChannelId: '1091667555145494579',
-
-    onGuildTagId: '1093920633957650554',
-    offGuildTagId: '1093920679738495047',
-
-    dmLogThreadId: '1091667913754280056',
-    guildLogThreadId: '1091668606011592804',
-    slashThreadId: '1093631825794048100',
-    buttonThreadId: '1091668147800637521',
-    modalThreadId: '1091668426453434390',
-    selectThreadId: '1091668273009008673',
-    messagecontextThreadId: '1091668196156776448',
-    usercontextThreadId: '1094323150721925241',
-    commandThreadId: '1091668104372830288'
-};
+module.exports = mongoose.models.GroupDmCommandStats || model('GroupDmCommandStats', GroupDmCommandStatsSchema);
